@@ -22,12 +22,11 @@ export const pack = (
   itemGroups: ItemGroupItf[],
   emptySpaceRatio: number
 ) => {
-  const congruencyGroups = _cg.gatherCongruencyGroups(itemGroups);
-  const sortedCongruencyGroups = congruencyGroups.toSorted(
-    (a, b) => -compDims(a.dimensions, b.dimensions)
-  );
+  const sortedCongruencyGroups = _cg
+    .gatherCongruencyGroups(itemGroups)
+    .sort((a, b) => -compDims(a.dimensions, b.dimensions));
 
-  const sortedBoxes = boxes.toSorted(
+  const sortedBoxes = [...boxes].sort(
     (a, b) => _d.volume(a.dimensions) - _d.volume(b.dimensions)
   );
 
@@ -45,8 +44,8 @@ export const pack = (
       let spaceToUse: SpaceItf | null = null;
 
       // Select space from used boxes
-      const spaceToUseIdx = usableSpaces.findIndex((us) =>
-        _d.fitOrientations(us.dimensions, cg.dimensions)
+      const spaceToUseIdx = usableSpaces.findIndex(
+        (us) => _d.fitOrientations(us.dimensions, cg.dimensions).length > 0
       );
       if (spaceToUseIdx !== -1) {
         spaceToUse = usableSpaces.splice(spaceToUseIdx, 1)[0];
@@ -220,13 +219,13 @@ const updateCongruencyGroup = (
 ) => {
   let packedQuantity = 0;
   const remainingItemGroups: ItemGroupItf[] = [];
-  const PackedItemsQty = _pi.quantity(packedItems);
+  const packedItemsQty = _pi.quantity(packedItems);
   for (const itemGroup of congruencyGroup.itemGroups) {
-    if (packedQuantity === PackedItemsQty) {
+    if (packedQuantity === packedItemsQty) {
       remainingItemGroups.push(itemGroup);
       break;
-    } else if (packedQuantity + itemGroup.quantity > PackedItemsQty) {
-      const requiredQuantity = PackedItemsQty - packedQuantity;
+    } else if (packedQuantity + itemGroup.quantity > packedItemsQty) {
+      const requiredQuantity = packedItemsQty - packedQuantity;
       const remainingQuantity = itemGroup.quantity - requiredQuantity;
       remainingItemGroups.push({
         item: itemGroup.item,

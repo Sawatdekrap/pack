@@ -62,15 +62,15 @@ export const fitsStrictly = (
   dimensionsA: DimensionsItf,
   dimensionsB: DimensionsItf
 ) =>
-  dimensionsA.length === dimensionsB.length &&
-  dimensionsA.width === dimensionsB.width &&
-  dimensionsA.depth === dimensionsB.depth;
+  dimensionsA.length >= dimensionsB.length &&
+  dimensionsA.width >= dimensionsB.width &&
+  dimensionsA.depth >= dimensionsB.depth;
 
 export const fitOrientations = (
   dimensionsA: DimensionsItf,
   dimensionsB: DimensionsItf
 ): Orientation[] => {
-  if (volume(dimensionsA) !== volume(dimensionsB)) return [];
+  if (volume(dimensionsA) < volume(dimensionsB)) return [];
 
   return ORIENTATIONS.filter((o) =>
     fitsStrictly(dimensionsA, rotate(dimensionsB, o))

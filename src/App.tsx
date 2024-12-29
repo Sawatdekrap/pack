@@ -1,30 +1,110 @@
-import React, { useState } from "react";
+import React from "react";
 import {
+  ActionIcon,
   AppShell,
   Button,
   Container,
   Grid,
   GridCol,
+  Group,
   Paper,
+  Slider,
   Stack,
+  Switch,
   Title,
 } from "@mantine/core";
-import { IconPackages } from "@tabler/icons-react";
+import {
+  IconCaretLeft,
+  IconCaretRight,
+  IconChevronLeftPipe,
+  IconChevronRightPipe,
+  IconEdit,
+  IconPackages,
+  IconPlus,
+  IconTrash,
+} from "@tabler/icons-react";
 import CustomTable from "./components/CustomTable";
-import { BoxItf, ItemGroupItf, PackedBoxItf } from "./interfaces";
+import { useAtom } from "jotai";
+import { boxesAtom, itemGroupsAtom, packedBoxesAtom } from "./atoms";
+import { pack } from "./algo/pack";
+import { ItemGroupItf, PackedBoxItf } from "./interfaces";
+import { PackedBoxProvider, usePackedBox } from "./contexts/PackedBoxContext";
 
-function App() {
-  const [boxes, setBoxes] = useState<BoxItf[]>([]);
-  const [itemGroups, setItemGroups] = useState<ItemGroupItf[]>([]);
-  const [packedBoxes, setPackedBoxes] = useState<PackedBoxItf[]>([]);
+interface PackedBoxProps {
+  packedBox: PackedBoxItf;
+}
+
+const PackedBox = ({ packedBox }: PackedBoxProps) => {
+  const { currentItemGroups, step, setStep } = usePackedBox();
+  const tableData = currentItemGroups.map((ig) => ({
+    name: ig.item.name,
+    quantity: ig.quantity,
+  }));
+
+  return (
+    <Paper mt={"sm"}>
+      <Stack>
+        <div>Preview...</div>
+
+        <Group display={"flex"}>
+          <ActionIcon onClick={() => setStep(step - 1)} variant="transparent">
+            <IconCaretLeft />
+          </ActionIcon>
+          <Slider
+            flex={"auto"}
+            min={0}
+            max={packedBox.packedItems.length}
+            value={step}
+            onChange={setStep}
+          />
+          <ActionIcon onClick={() => setStep(step + 1)} variant="transparent">
+            <IconCaretRight />
+          </ActionIcon>
+        </Group>
+        <CustomTable
+          columns={[
+            { key: "name", title: "Name" },
+            { key: "quantity", title: "quantity" },
+          ]}
+          data={tableData}
+        />
+      </Stack>
+    </Paper>
+  );
+};
+
+const App = () => {
+  const [boxes, setBoxes] = useAtom(boxesAtom);
+  const [itemGroups, setItemGroups] = useAtom(itemGroupsAtom);
+  const [packedBoxes, setPackedBoxes] = useAtom(packedBoxesAtom);
+
+  const onPack = () => {
+    if (boxes.length === 0 || itemGroups.length === 0) return;
+    setPackedBoxes(
+      pack(
+        boxes.filter((b) => b.enabled),
+        itemGroups,
+        1.1
+      )
+    );
+  };
 
   const boxData = boxes.map((b) => ({
     name: b.name,
     length: b.dimensions.length,
     width: b.dimensions.width,
     depth: b.dimensions.depth,
-    enabled: b.enabled,
-    actions: <>Actions</>,
+    enabled: <Switch checked={b.enabled} />,
+    actions: (
+      <>
+        <ActionIcon variant="subtle" onClick={() => {}}>
+          <IconEdit />
+        </ActionIcon>
+        <ActionIcon variant="subtle" onClick={() => {}} color="red">
+          <IconTrash />
+        </ActionIcon>
+      </>
+    ),
   }));
 
   const itemData = itemGroups.map((i) => ({
@@ -33,18 +113,29 @@ function App() {
     width: i.item.dimensions.width,
     depth: i.item.dimensions.depth,
     quantity: i.quantity,
-    actions: <>Actions</>,
+    actions: (
+      <>
+        <ActionIcon variant="subtle" onClick={() => {}}>
+          <IconEdit />
+        </ActionIcon>
+        <ActionIcon variant="subtle" onClick={() => {}} color="red">
+          <IconTrash />
+        </ActionIcon>
+      </>
+    ),
   }));
 
   return (
-    <AppShell header={{ height: 60 }} padding={"md"}>
+    <AppShell header={{ height: 60 }} padding={"md"} bg={"#fff8f0"}>
       <AppShell.Header>
-        <Title unselectable="on">Pack</Title>
+        <Title unselectable="on" ml={"sm"}>
+          Pack
+        </Title>
       </AppShell.Header>
       <AppShell.Main>
         <Container>
           <Title>Boxes</Title>
-          <Paper>
+          <Paper mt={"sm"}>
             <CustomTable
               columns={[
                 { key: "name", title: "Name" },
@@ -56,9 +147,12 @@ function App() {
               ]}
               data={boxData}
             />
+            <Button variant="subtle" size="small" leftSection={<IconPlus />}>
+              New Box
+            </Button>
           </Paper>
           <Title>Items</Title>
-          <Paper>
+          <Paper mt={"sm"}>
             <CustomTable
               columns={[
                 { key: "name", title: "Name" },
@@ -70,8 +164,17 @@ function App() {
               ]}
               data={itemData}
             />
+            <Button variant="subtle" size="small" leftSection={<IconPlus />}>
+              New Item
+            </Button>
           </Paper>
-          <Button size="xl" radius="xl" leftSection={<IconPackages />}>
+          <Button
+            size="xl"
+            radius="xl"
+            leftSection={<IconPackages />}
+            onClick={onPack}
+            my={"md"}
+          >
             Pack
           </Button>
           <Grid>
@@ -81,18 +184,17 @@ function App() {
           {!packedBoxes ? (
             <div>Awaiting preview...</div>
           ) : (
-            <Paper>
-              <Stack>
-                <div>Preview...</div>
-                <CustomTable columns={[]} data={[]} />
-              </Stack>
-            </Paper>
+            packedBoxes.map((pb, pbIdx) => (
+              <PackedBoxProvider packedBox={pb}>
+                <PackedBox key={pbIdx} packedBox={pb} />
+              </PackedBoxProvider>
+            ))
           )}
         </Container>
       </AppShell.Main>
       <AppShell.Footer p="md">Footer...</AppShell.Footer>
     </AppShell>
   );
-}
+};
 
 export default App;

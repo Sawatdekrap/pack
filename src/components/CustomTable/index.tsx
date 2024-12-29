@@ -25,10 +25,10 @@ const CustomTable = ({ columns, data, emptyElement }: CustomTableProps) => {
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {data.map((row) => (
-          <Table.Tr>
+        {data.map((row, rowIdx) => (
+          <Table.Tr key={rowIdx}>
             {columns.map((c) => (
-              <Table.Th>{row[c.key]}</Table.Th>
+              <Table.Td key={c.title}>{row[c.key]}</Table.Td>
             ))}
           </Table.Tr>
         ))}
