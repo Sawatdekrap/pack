@@ -2,24 +2,31 @@ import React from "react";
 import {
   ActionIcon,
   AppShell,
+  Box,
   Button,
+  ColorSwatch,
   Container,
+  Divider,
+  FileButton,
   Grid,
   GridCol,
   Group,
+  NumberInput,
   Paper,
   Slider,
   Stack,
   Switch,
+  ThemeIcon,
   Title,
 } from "@mantine/core";
 import {
   IconCaretLeft,
   IconCaretRight,
-  IconChevronLeftPipe,
-  IconChevronRightPipe,
   IconEdit,
+  IconFileTypeCsv,
+  IconPackage,
   IconPackages,
+  IconPercentage70,
   IconPlus,
   IconTrash,
 } from "@tabler/icons-react";
@@ -27,42 +34,54 @@ import CustomTable from "./components/CustomTable";
 import { useAtom } from "jotai";
 import { boxesAtom, itemGroupsAtom, packedBoxesAtom } from "./atoms";
 import { pack } from "./algo/pack";
-import { ItemGroupItf, PackedBoxItf } from "./interfaces";
+import { PackedBoxItf } from "./interfaces";
 import { PackedBoxProvider, usePackedBox } from "./contexts/PackedBoxContext";
+import PackedBoxPreview from "./components/PackedBoxPreview";
+import { colorFromString } from "./components/PackedBoxPreview/helpers";
 
 interface PackedBoxProps {
   packedBox: PackedBoxItf;
 }
 
 const PackedBox = ({ packedBox }: PackedBoxProps) => {
-  const { currentItemGroups, step, setStep } = usePackedBox();
+  const { currentItemGroups, step, totalSteps, setStep } = usePackedBox();
   const tableData = currentItemGroups.map((ig) => ({
+    color: <ColorSwatch color={colorFromString(ig.item.name)} />,
     name: ig.item.name,
     quantity: ig.quantity,
   }));
 
   return (
-    <Paper mt={"sm"}>
+    <Paper mt={"sm"} shadow="sm">
       <Stack>
-        <div>Preview...</div>
+        <PackedBoxPreview />
 
-        <Group display={"flex"}>
-          <ActionIcon onClick={() => setStep(step - 1)} variant="transparent">
+        <Group display={"flex"} gap={"xs"} px={"xs"}>
+          <ActionIcon
+            onClick={() => setStep(step - 1)}
+            variant="transparent"
+            disabled={step === 0}
+          >
             <IconCaretLeft />
           </ActionIcon>
           <Slider
             flex={"auto"}
             min={0}
-            max={packedBox.packedItems.length}
+            max={totalSteps}
             value={step}
             onChange={setStep}
           />
-          <ActionIcon onClick={() => setStep(step + 1)} variant="transparent">
+          <ActionIcon
+            onClick={() => setStep(step + 1)}
+            variant="transparent"
+            disabled={step === totalSteps}
+          >
             <IconCaretRight />
           </ActionIcon>
         </Group>
         <CustomTable
           columns={[
+            { key: "color", title: "" },
             { key: "name", title: "Name" },
             { key: "quantity", title: "quantity" },
           ]}
@@ -89,6 +108,10 @@ const App = () => {
     );
   };
 
+  const onBoxesFileChange = (f: File | null) => {};
+
+  const onItemsFileChange = (f: File | null) => {};
+
   const boxData = boxes.map((b) => ({
     name: b.name,
     length: b.dimensions.length,
@@ -112,7 +135,7 @@ const App = () => {
     length: i.item.dimensions.length,
     width: i.item.dimensions.width,
     depth: i.item.dimensions.depth,
-    quantity: i.quantity,
+    quantity: <NumberInput value={i.quantity} onChange={() => {}} />,
     actions: (
       <>
         <ActionIcon variant="subtle" onClick={() => {}}>
@@ -126,24 +149,38 @@ const App = () => {
   }));
 
   return (
-    <AppShell header={{ height: 60 }} padding={"md"} bg={"#fff8f0"}>
+    <AppShell header={{ height: 60 }} mih={"100vh"} padding={"md"}>
       <AppShell.Header>
-        <Title unselectable="on" ml={"sm"}>
+        <Title unselectable="on" ml={"lg"}>
           Pack
         </Title>
       </AppShell.Header>
       <AppShell.Main>
         <Container>
-          <Title>Boxes</Title>
-          <Paper mt={"sm"}>
+          <Group display={"flex"} align="flex-end" mt={"md"}>
+            <Title flex={"auto"}>Boxes</Title>
+            <FileButton onChange={onBoxesFileChange}>
+              {(props) => (
+                <Button
+                  {...props}
+                  variant="transparent"
+                  leftSection={<IconFileTypeCsv />}
+                >
+                  Upload CSV
+                </Button>
+              )}
+            </FileButton>
+          </Group>
+
+          <Paper shadow="sm">
             <CustomTable
               columns={[
                 { key: "name", title: "Name" },
-                { key: "length", title: "Length" },
-                { key: "width", title: "Width" },
-                { key: "depth", title: "Depth" },
+                { key: "length", title: "Length", width: "100px" },
+                { key: "width", title: "Width", width: "100px" },
+                { key: "depth", title: "Depth", width: "100px" },
                 { key: "enabled", title: "Enabled", width: "80px" },
-                { key: "actions", title: "", width: "100px" },
+                { key: "actions", title: "", width: "80px" },
               ]}
               data={boxData}
             />
@@ -151,16 +188,30 @@ const App = () => {
               New Box
             </Button>
           </Paper>
-          <Title>Items</Title>
-          <Paper mt={"sm"}>
+          <Group display={"flex"} align="flex-end" mt={"md"}>
+            <Title flex={"auto"}>Items</Title>
+            <FileButton onChange={onItemsFileChange}>
+              {(props) => (
+                <Button
+                  {...props}
+                  variant="transparent"
+                  leftSection={<IconFileTypeCsv />}
+                >
+                  Upload CSV
+                </Button>
+              )}
+            </FileButton>
+          </Group>
+
+          <Paper shadow="sm">
             <CustomTable
               columns={[
                 { key: "name", title: "Name" },
-                { key: "length", title: "Length" },
-                { key: "width", title: "Width" },
-                { key: "depth", title: "Depth" },
-                { key: "quantity", title: "Qty", width: "80px" },
-                { key: "actions", title: "", width: "100px" },
+                { key: "length", title: "Length", width: "100px" },
+                { key: "width", title: "Width", width: "100px" },
+                { key: "depth", title: "Depth", width: "100px" },
+                { key: "quantity", title: "Qty", width: "100px" },
+                { key: "actions", title: "", width: "80px" },
               ]}
               data={itemData}
             />
@@ -168,27 +219,51 @@ const App = () => {
               New Item
             </Button>
           </Paper>
-          <Button
-            size="xl"
-            radius="xl"
-            leftSection={<IconPackages />}
-            onClick={onPack}
-            my={"md"}
-          >
-            Pack
-          </Button>
-          <Grid>
-            <GridCol span={6}>Boxes used</GridCol>
-            <GridCol span={6}>% Space used</GridCol>
-          </Grid>
-          {!packedBoxes ? (
+          <Group display={"flex"} justify="center">
+            <Button
+              size="xl"
+              radius="xl"
+              leftSection={<IconPackages />}
+              onClick={onPack}
+              my={"md"}
+            >
+              Pack
+            </Button>
+          </Group>
+          {packedBoxes.length === 0 ? (
             <div>Awaiting preview...</div>
           ) : (
-            packedBoxes.map((pb, pbIdx) => (
-              <PackedBoxProvider packedBox={pb}>
-                <PackedBox key={pbIdx} packedBox={pb} />
-              </PackedBoxProvider>
-            ))
+            <>
+              <Grid>
+                <GridCol span={6}>
+                  <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
+                    <Title order={4}>Boxes used</Title>
+                    <Title order={1} ta={"center"}>
+                      <ThemeIcon variant="white" size={"xl"}>
+                        <IconPackage />
+                      </ThemeIcon>
+                      {packedBoxes.length}
+                    </Title>
+                  </Paper>
+                </GridCol>
+                <GridCol span={6}>
+                  <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
+                    <Title order={4}>Space used</Title>
+                    <Title order={1} ta={"center"}>
+                      <ThemeIcon variant="white" size={"xl"}>
+                        <IconPercentage70 />
+                      </ThemeIcon>
+                      70%
+                    </Title>
+                  </Paper>
+                </GridCol>
+              </Grid>
+              {packedBoxes.map((pb, pbIdx) => (
+                <PackedBoxProvider packedBox={pb}>
+                  <PackedBox key={pbIdx} packedBox={pb} />
+                </PackedBoxProvider>
+              ))}
+            </>
           )}
         </Container>
       </AppShell.Main>

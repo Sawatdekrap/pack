@@ -5,6 +5,7 @@ interface PackedBoxContextItf {
   packedBox: PackedBoxItf;
   step: number;
   setStep: (v: number) => void;
+  totalSteps: number;
   currentItemGroups: ItemGroupItf[];
 }
 
@@ -18,7 +19,13 @@ interface PackedBoxProviderProps {
 }
 
 const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
-  const [step, setStep] = useState(0);
+  const [step, setStepActual] = useState(0);
+
+  const totalSteps = packedBox.packedItems.length + 1;
+  const setStep = (value: number) => {
+    if (value < 0 || value > totalSteps) return;
+    setStepActual(value);
+  };
 
   const stepPackedItems = packedBox.packedItems.slice(0, step || undefined);
   const itemGroupRecords = stepPackedItems.reduce<Record<string, ItemGroupItf>>(
@@ -41,6 +48,7 @@ const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
       value={{
         packedBox,
         step,
+        totalSteps,
         setStep,
         currentItemGroups,
       }}
