@@ -19,9 +19,9 @@ interface PackedBoxProviderProps {
 }
 
 const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
-  const [step, setStepActual] = useState(0);
-
   const totalSteps = packedBox.packedItems.length + 1;
+  const [step, setStepActual] = useState(totalSteps);
+
   const setStep = (value: number) => {
     if (value < 0 || value > totalSteps) return;
     setStepActual(value);

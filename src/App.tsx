@@ -394,6 +394,8 @@ const App = () => {
               size="xl"
               radius="xl"
               leftSection={<IconPackages />}
+              variant="gradient"
+              gradient={{ from: "blue", to: "teal", deg: 165 }}
               onClick={onPack}
               my={"md"}
             >

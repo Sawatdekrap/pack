@@ -12,6 +12,10 @@ const PackedBoxPreview = () => {
 
   const cameraRef = useRef<CameraControls>(null);
 
+  const resetCamera = () => {
+    cameraRef?.current?.setLookAt(-3, 4, 3, 0, 2, 0, true);
+  };
+
   const renderedDisplay = useMemo(() => {
     const boxDims = packedBox.box.dimensions;
     const scale =
@@ -89,7 +93,7 @@ const PackedBoxPreview = () => {
   }, [packedBox, step]);
 
   return (
-    <Canvas style={{ height: "450px" }} shadows>
+    <Canvas style={{ height: "450px" }} shadows onCreated={resetCamera}>
       <CameraControls ref={cameraRef} />
       {renderedDisplay}
     </Canvas>
