@@ -38,6 +38,7 @@ import PackedBoxPreview from "./components/PackedBoxPreview";
 import { colorFromString } from "./components/PackedBoxPreview/helpers";
 import BoxModal from "./components/BoxModal";
 import ItemModal from "./components/ItemModal";
+import { EMPTY_BOX, EMPTY_ITEM_GROUP } from "./data";
 
 interface PackedBoxProps {
   packedBox: PackedBoxItf;
@@ -98,6 +99,8 @@ const App = () => {
   const [packedBoxes, setPackedBoxes] = useAtom(packedBoxesAtom);
   const [refBoxIdx, setRefBoxIdx] = useState<number | undefined>();
   const [refItemIdx, setRefItemIdx] = useState<number | undefined>();
+  const [newBoxOpened, setNewBoxOpened] = useState(false);
+  const [newItemOpened, setNewItemOpened] = useState(false);
 
   const onBoxEdit = (boxIdx: number, box: BoxItf) => {
     const newBoxes = [...boxes];
@@ -105,10 +108,20 @@ const App = () => {
     setBoxes(newBoxes);
   };
 
-  const onItemEdit = (itemIdx: number, item: ItemGroupItf) => {
+  const onBoxCreate = (box: BoxItf) => {
+    const newBoxes = [...boxes, box];
+    setBoxes(newBoxes);
+  };
+
+  const onItemEdit = (itemIdx: number, ig: ItemGroupItf) => {
     const newItems = [...itemGroups];
-    newItems[itemIdx] = { ...item };
+    newItems[itemIdx] = { ...ig };
     setItemGroups(newItems);
+  };
+
+  const onItemCreate = (ig: ItemGroupItf) => {
+    const newItemGroups = [...itemGroups, ig];
+    setItemGroups(newItemGroups);
   };
 
   const onPack = () => {
@@ -212,17 +225,10 @@ const App = () => {
               variant="subtle"
               size="small"
               leftSection={<IconPlus />}
-              onClick={() => {}}
+              onClick={() => setNewBoxOpened(true)}
             >
               New Box
             </Button>
-            {/* <BoxModal
-              box={undefined}
-              opened={refEditBox !== undefined}
-              onClose={() => setRefEditBox(undefined)}
-              onSubmit={() => setRefEditBox(undefined)}
-              title="New Box"
-            /> */}
             <BoxModal
               box={refBoxIdx === undefined ? undefined : boxes[refBoxIdx]}
               opened={refBoxIdx !== undefined}
@@ -233,6 +239,16 @@ const App = () => {
                 setRefBoxIdx(undefined);
               }}
               title="Edit Box"
+            />
+            <BoxModal
+              box={newBoxOpened ? EMPTY_BOX : undefined}
+              opened={newBoxOpened}
+              onClose={() => setNewBoxOpened(false)}
+              onSubmit={(box) => {
+                onBoxCreate(box);
+                setNewBoxOpened(false);
+              }}
+              title="Create Box"
             />
           </Paper>
           <Group display={"flex"} align="flex-end" mt={"md"}>
@@ -262,7 +278,12 @@ const App = () => {
               ]}
               data={itemData}
             />
-            <Button variant="subtle" size="small" leftSection={<IconPlus />}>
+            <Button
+              variant="subtle"
+              size="small"
+              leftSection={<IconPlus />}
+              onClick={() => setNewItemOpened(true)}
+            >
               New Item
             </Button>
             <ItemModal
@@ -275,6 +296,16 @@ const App = () => {
                 setRefItemIdx(undefined);
               }}
               title="Edit Item"
+            />
+            <ItemModal
+              ig={newItemOpened ? EMPTY_ITEM_GROUP : undefined}
+              opened={newItemOpened}
+              onClose={() => setNewItemOpened(false)}
+              onSubmit={(ig) => {
+                onItemCreate(ig);
+                setNewItemOpened(false);
+              }}
+              title="Create Item"
             />
           </Paper>
           <Group display={"flex"} justify="center">
