@@ -1,5 +1,27 @@
 import { BoxItf, ItemGroupItf } from "./interfaces";
 
+export const EMPTY_BOX: BoxItf = {
+  name: "",
+  dimensions: {
+    length: 0,
+    width: 0,
+    depth: 0,
+  },
+  enabled: true,
+};
+
+export const EMPTY_ITEM_GROUP: ItemGroupItf = {
+  item: {
+    name: "",
+    dimensions: {
+      length: 0,
+      width: 0,
+      depth: 0,
+    },
+  },
+  quantity: 1,
+};
+
 export const INITIAL_BOXES: BoxItf[] = [
   {
     name: "Box 1",
