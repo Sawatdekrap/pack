@@ -9,6 +9,7 @@ import {
   Grid,
   GridCol,
   Group,
+  Image,
   NumberInput,
   Paper,
   Slider,
@@ -41,6 +42,7 @@ import BoxModal from "./components/BoxModal";
 import ItemModal from "./components/ItemModal";
 import { EMPTY_BOX, EMPTY_ITEM_GROUP } from "./data";
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
+import logo from "./boxPackerLogo.svg";
 
 interface PackedBoxProps {
   packedBox: PackedBoxItf;
@@ -239,14 +241,16 @@ const App = () => {
   return (
     <AppShell header={{ height: 60 }} mih={"100vh"} padding={"md"}>
       <AppShell.Header>
-        <Title unselectable="on" ml={"lg"}>
-          Pack
-        </Title>
+        <Group display={"flex"} align="center" h={"100%"}>
+          <Image src={logo} alt="logo" w={"200px"} ml={"md"} />
+        </Group>
       </AppShell.Header>
       <AppShell.Main bg={"#fdfdfd"}>
         <Container>
           <Group display={"flex"} align="flex-end" mt={"md"}>
-            <Title flex={"auto"}>Boxes</Title>
+            <Title order={2} flex={"auto"}>
+              Boxes
+            </Title>
             <FileButton onChange={onBoxesFileChange}>
               {(props) => (
                 <Button
@@ -315,7 +319,9 @@ const App = () => {
             </DeleteConfirmationModal>
           </Paper>
           <Group display={"flex"} align="flex-end" mt={"md"}>
-            <Title flex={"auto"}>Items</Title>
+            <Title order={2} flex={"auto"}>
+              Items
+            </Title>
             <FileButton onChange={onItemsFileChange}>
               {(props) => (
                 <Button
