@@ -98,7 +98,7 @@ const BoxModal = ({ box, opened, onClose, onSubmit, title }: BoxModalProps) => {
           {...form.getInputProps("enabled", { type: "checkbox" })}
         />
         <Group display={"flex"} justify="flex-end" mt={"1rem"}>
-          <Button variant="transparent" onClick={onClose}>
+          <Button variant="default" onClick={onClose}>
             Cancel
           </Button>
           <Button type="submit">Save</Button>

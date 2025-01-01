@@ -22,6 +22,7 @@ import {
   IconCaretRight,
   IconEdit,
   IconFileTypeCsv,
+  IconMilk,
   IconPackage,
   IconPackages,
   IconPercentage70,
@@ -39,6 +40,7 @@ import { colorFromString } from "./components/PackedBoxPreview/helpers";
 import BoxModal from "./components/BoxModal";
 import ItemModal from "./components/ItemModal";
 import { EMPTY_BOX, EMPTY_ITEM_GROUP } from "./data";
+import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
 
 interface PackedBoxProps {
   packedBox: PackedBoxItf;
@@ -82,9 +84,9 @@ const PackedBox = ({ packedBox }: PackedBoxProps) => {
         </Group>
         <CustomTable
           columns={[
-            { key: "color", title: "" },
+            { key: "color", title: "", width: "43px" },
             { key: "name", title: "Name" },
-            { key: "quantity", title: "quantity" },
+            { key: "quantity", title: "quantity", width: "80px" },
           ]}
           data={tableData}
         />
@@ -101,6 +103,10 @@ const App = () => {
   const [refItemIdx, setRefItemIdx] = useState<number | undefined>();
   const [newBoxOpened, setNewBoxOpened] = useState(false);
   const [newItemOpened, setNewItemOpened] = useState(false);
+  const [refDeleteBoxIdx, setRefDeleteBoxIdx] = useState<number | undefined>();
+  const [refDeleteItemIdx, setRefDeleteItemIdx] = useState<
+    number | undefined
+  >();
 
   const onBoxEdit = (boxIdx: number, box: BoxItf) => {
     const newBoxes = [...boxes];
@@ -113,6 +119,18 @@ const App = () => {
     setBoxes(newBoxes);
   };
 
+  const onBoxDelete = (boxIdx: number) => {
+    const newBoxes = [...boxes];
+    newBoxes.splice(boxIdx, 1);
+    setBoxes(newBoxes);
+  };
+
+  const setBoxEnabled = (boxIdx: number, enabled: boolean) => {
+    const newBoxes = [...boxes];
+    newBoxes[boxIdx] = { ...newBoxes[boxIdx], enabled };
+    setBoxes(newBoxes);
+  };
+
   const onItemEdit = (itemIdx: number, ig: ItemGroupItf) => {
     const newItems = [...itemGroups];
     newItems[itemIdx] = { ...ig };
@@ -122,6 +140,18 @@ const App = () => {
   const onItemCreate = (ig: ItemGroupItf) => {
     const newItemGroups = [...itemGroups, ig];
     setItemGroups(newItemGroups);
+  };
+
+  const onItemDelete = (igIdx: number) => {
+    const newItemGroups = [...itemGroups];
+    newItemGroups.splice(igIdx, 1);
+    setItemGroups(newItemGroups);
+  };
+
+  const setItemQuantity = (itemIdx: number, quantity: number) => {
+    const newItems = [...itemGroups];
+    newItems[itemIdx] = { ...newItems[itemIdx], quantity };
+    setItemGroups(newItems);
   };
 
   const onPack = () => {
@@ -144,7 +174,12 @@ const App = () => {
     length: b.dimensions.length,
     width: b.dimensions.width,
     depth: b.dimensions.depth,
-    enabled: <Switch checked={b.enabled} />,
+    enabled: (
+      <Switch
+        checked={b.enabled}
+        onChange={() => setBoxEnabled(bIdx, !b.enabled)}
+      />
+    ),
     actions: (
       <>
         <ActionIcon
@@ -155,7 +190,11 @@ const App = () => {
         >
           <IconEdit />
         </ActionIcon>
-        <ActionIcon variant="subtle" onClick={() => {}} color="red">
+        <ActionIcon
+          variant="subtle"
+          onClick={() => setRefDeleteBoxIdx(bIdx)}
+          color="red"
+        >
           <IconTrash />
         </ActionIcon>
       </>
@@ -167,7 +206,15 @@ const App = () => {
     length: i.item.dimensions.length,
     width: i.item.dimensions.width,
     depth: i.item.dimensions.depth,
-    quantity: <NumberInput value={i.quantity} onChange={() => {}} />,
+    quantity: (
+      <NumberInput
+        value={i.quantity}
+        onChange={(val) =>
+          setItemQuantity(igIdx, typeof val === "string" ? 0 : val)
+        }
+        min={0}
+      />
+    ),
     actions: (
       <>
         <ActionIcon
@@ -178,7 +225,11 @@ const App = () => {
         >
           <IconEdit />
         </ActionIcon>
-        <ActionIcon variant="subtle" onClick={() => {}} color="red">
+        <ActionIcon
+          variant="subtle"
+          onClick={() => setRefDeleteItemIdx(igIdx)}
+          color="red"
+        >
           <IconTrash />
         </ActionIcon>
       </>
@@ -192,7 +243,7 @@ const App = () => {
           Pack
         </Title>
       </AppShell.Header>
-      <AppShell.Main>
+      <AppShell.Main bg={"#fdfdfd"}>
         <Container>
           <Group display={"flex"} align="flex-end" mt={"md"}>
             <Title flex={"auto"}>Boxes</Title>
@@ -203,7 +254,7 @@ const App = () => {
                   variant="transparent"
                   leftSection={<IconFileTypeCsv />}
                 >
-                  Upload CSV
+                  Import CSV
                 </Button>
               )}
             </FileButton>
@@ -250,6 +301,18 @@ const App = () => {
               }}
               title="Create Box"
             />
+            <DeleteConfirmationModal
+              opened={refDeleteBoxIdx !== undefined}
+              onClose={() => setRefDeleteBoxIdx(undefined)}
+              onDelete={() => {
+                if (refDeleteBoxIdx === undefined) return;
+                onBoxDelete(refDeleteBoxIdx);
+                setRefDeleteBoxIdx(undefined);
+              }}
+              title="Delete Box"
+            >
+              Are you sure you want to delete this box?
+            </DeleteConfirmationModal>
           </Paper>
           <Group display={"flex"} align="flex-end" mt={"md"}>
             <Title flex={"auto"}>Items</Title>
@@ -260,7 +323,7 @@ const App = () => {
                   variant="transparent"
                   leftSection={<IconFileTypeCsv />}
                 >
-                  Upload CSV
+                  Import CSV
                 </Button>
               )}
             </FileButton>
@@ -307,6 +370,18 @@ const App = () => {
               }}
               title="Create Item"
             />
+            <DeleteConfirmationModal
+              opened={refDeleteItemIdx !== undefined}
+              onClose={() => setRefDeleteItemIdx(undefined)}
+              onDelete={() => {
+                if (refDeleteItemIdx === undefined) return;
+                onItemDelete(refDeleteItemIdx);
+                setRefDeleteItemIdx(undefined);
+              }}
+              title="Delete Item"
+            >
+              Are you sure you want to delete this item?
+            </DeleteConfirmationModal>
           </Paper>
           <Group display={"flex"} justify="center">
             <Button
@@ -324,7 +399,7 @@ const App = () => {
           ) : (
             <>
               <Grid mt={"md"}>
-                <GridCol span={6}>
+                <GridCol span={4}>
                   <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
                     <Title order={4}>Boxes used</Title>
                     <Title order={1} ta={"center"}>
@@ -335,7 +410,18 @@ const App = () => {
                     </Title>
                   </Paper>
                 </GridCol>
-                <GridCol span={6}>
+                <GridCol span={4}>
+                  <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
+                    <Title order={4}>Most Items per Box</Title>
+                    <Title order={1} ta={"center"}>
+                      <ThemeIcon variant="white" size={"xl"}>
+                        <IconMilk />
+                      </ThemeIcon>
+                      12
+                    </Title>
+                  </Paper>
+                </GridCol>
+                <GridCol span={4}>
                   <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
                     <Title order={4}>Space used</Title>
                     <Title order={1} ta={"center"}>
@@ -348,8 +434,8 @@ const App = () => {
                 </GridCol>
               </Grid>
               {packedBoxes.map((pb, pbIdx) => (
-                <PackedBoxProvider packedBox={pb}>
-                  <PackedBox key={pbIdx} packedBox={pb} />
+                <PackedBoxProvider key={pbIdx} packedBox={pb}>
+                  <PackedBox packedBox={pb} />
                 </PackedBoxProvider>
               ))}
             </>

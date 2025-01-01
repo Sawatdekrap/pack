@@ -103,11 +103,12 @@ const ItemModal = ({
         <NumberInput
           label="Quantity"
           key={form.key("quantity")}
+          min={0}
           {...form.getInputProps("quantity")}
           mt={"0.25rem"}
         />
         <Group display={"flex"} justify="flex-end" mt={"1rem"}>
-          <Button variant="transparent" onClick={onClose}>
+          <Button variant="default" onClick={onClose}>
             Cancel
           </Button>
           <Button type="submit">Save</Button>

@@ -4,7 +4,7 @@ interface DeleteConfirmationModalProps {
   opened: boolean;
   onClose: () => void;
   onDelete: () => void;
-  title: string;
+  title: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -18,12 +18,12 @@ const DeleteConfirmationModal = ({
   return (
     <Modal opened={opened} onClose={onClose} title={title}>
       {children}
-      <Group display={"flex"} justify="flex-end">
-        <Button variant="transparent" onClick={onClose}>
+      <Group display={"flex"} justify="flex-end" mt={"1rem"}>
+        <Button variant="default" onClick={onClose}>
           Cancel
         </Button>
         <Button color="red" onClick={onDelete}>
-          Cancel
+          Delete
         </Button>
       </Group>
     </Modal>
