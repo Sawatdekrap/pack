@@ -63,7 +63,7 @@ const PackedBox = ({ packedBox }: PackedBoxProps) => {
           columns={[
             { key: "color", title: "", width: "43px" },
             { key: "name", title: "Name" },
-            { key: "quantity", title: "quantity", width: "80px" },
+            { key: "quantity", title: "Quantity", width: "80px" },
           ]}
           data={tableData}
         />

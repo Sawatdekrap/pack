@@ -8,6 +8,7 @@ import { Canvas } from "@react-three/fiber";
 import PreviewItemMesh from "./PreviewItemMesh";
 import { ActionIcon, Box, Group, Slider } from "@mantine/core";
 import {
+  IconCameraRotate,
   IconCaretLeft,
   IconCaretRight,
   IconMaximize,
@@ -108,6 +109,13 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
     <Box h={size === "lg" ? "90vh" : undefined}>
       <Group pos="relative" w="100%" display="flex" justify="flex-end">
         <Group pos="absolute" top="0.5rem" right="0.5rem">
+          <ActionIcon
+            variant="transparent"
+            style={{ zIndex: 50 }}
+            onClick={() => resetCamera()}
+          >
+            <IconCameraRotate />
+          </ActionIcon>
           <ActionIcon
             variant="transparent"
             style={{ zIndex: 50 }}
