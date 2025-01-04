@@ -7,6 +7,8 @@ interface PackedBoxContextItf {
   setStep: (v: number) => void;
   totalSteps: number;
   currentItemGroups: ItemGroupItf[];
+  fullscreen: boolean;
+  setFullscreen: (val: boolean) => void;
 }
 
 const PackedBoxContext = createContext<PackedBoxContextItf | undefined>(
@@ -21,6 +23,7 @@ interface PackedBoxProviderProps {
 const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
   const totalSteps = packedBox.packedItems.length + 1;
   const [step, setStepActual] = useState(totalSteps);
+  const [fullscreen, setFullscreen] = useState(false);
 
   const setStep = (value: number) => {
     if (value < 0 || value > totalSteps) return;
@@ -51,6 +54,8 @@ const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
         totalSteps,
         setStep,
         currentItemGroups,
+        fullscreen,
+        setFullscreen,
       }}
     >
       {children}

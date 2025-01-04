@@ -12,15 +12,12 @@ import {
   Image,
   NumberInput,
   Paper,
-  Slider,
   Stack,
   Switch,
   ThemeIcon,
   Title,
 } from "@mantine/core";
 import {
-  IconCaretLeft,
-  IconCaretRight,
   IconEdit,
   IconFileTypeCsv,
   IconMilk,
@@ -43,13 +40,14 @@ import ItemModal from "./components/ItemModal";
 import { EMPTY_BOX, EMPTY_ITEM_GROUP } from "./data";
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
 import logo from "./boxPackerLogo.svg";
+import PackedBoxModal from "./components/PackedBoxModal";
 
 interface PackedBoxProps {
   packedBox: PackedBoxItf;
 }
 
 const PackedBox = ({ packedBox }: PackedBoxProps) => {
-  const { currentItemGroups, step, totalSteps, setStep } = usePackedBox();
+  const { currentItemGroups } = usePackedBox();
   const tableData = currentItemGroups.map((ig) => ({
     color: <ColorSwatch color={colorFromString(ig.item.name)} />,
     name: ig.item.name,
@@ -59,31 +57,8 @@ const PackedBox = ({ packedBox }: PackedBoxProps) => {
   return (
     <Paper mt={"md"} shadow="sm">
       <Stack>
-        <PackedBoxPreview />
-
-        <Group display={"flex"} gap={"xs"} px={"xs"}>
-          <ActionIcon
-            onClick={() => setStep(step - 1)}
-            variant="transparent"
-            disabled={step === 0}
-          >
-            <IconCaretLeft />
-          </ActionIcon>
-          <Slider
-            flex={"auto"}
-            min={0}
-            max={totalSteps}
-            value={step}
-            onChange={setStep}
-          />
-          <ActionIcon
-            onClick={() => setStep(step + 1)}
-            variant="transparent"
-            disabled={step === totalSteps}
-          >
-            <IconCaretRight />
-          </ActionIcon>
-        </Group>
+        <PackedBoxPreview size="sm" />
+        <PackedBoxModal />
         <CustomTable
           columns={[
             { key: "color", title: "", width: "43px" },

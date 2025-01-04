@@ -6,9 +6,21 @@ import ItemMesh from "./ItemMesh";
 import { offsetDimensionsInBox } from "./helpers";
 import { Canvas } from "@react-three/fiber";
 import PreviewItemMesh from "./PreviewItemMesh";
+import { ActionIcon, Box, Group, Slider } from "@mantine/core";
+import {
+  IconCaretLeft,
+  IconCaretRight,
+  IconMaximize,
+  IconMinimize,
+} from "@tabler/icons-react";
 
-const PackedBoxPreview = () => {
-  const { packedBox, step, setStep } = usePackedBox();
+interface PackedBoxPreviewProps {
+  size: "sm" | "lg";
+}
+
+const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
+  const { packedBox, step, setStep, totalSteps, fullscreen, setFullscreen } =
+    usePackedBox();
 
   const cameraRef = useRef<CameraControls>(null);
 
@@ -93,10 +105,50 @@ const PackedBoxPreview = () => {
   }, [packedBox, step]);
 
   return (
-    <Canvas style={{ height: "450px" }} shadows onCreated={resetCamera}>
-      <CameraControls ref={cameraRef} />
-      {renderedDisplay}
-    </Canvas>
+    <Box h={size === "lg" ? "90vh" : undefined}>
+      <Group pos="relative" w="100%" display="flex" justify="flex-end">
+        <Group pos="absolute" top="0.5rem" right="0.5rem">
+          <ActionIcon
+            variant="transparent"
+            style={{ zIndex: 50 }}
+            onClick={() => setFullscreen(!fullscreen)}
+          >
+            {fullscreen ? <IconMinimize /> : <IconMaximize />}
+          </ActionIcon>
+        </Group>
+      </Group>
+      <Canvas
+        style={{ height: size === "sm" ? "450px" : "85vh" }}
+        shadows
+        onCreated={resetCamera}
+      >
+        <CameraControls ref={cameraRef} />
+        {renderedDisplay}
+      </Canvas>
+      <Group display={"flex"} gap={"xs"} px={"xs"}>
+        <ActionIcon
+          onClick={() => setStep(step - 1)}
+          variant="transparent"
+          disabled={step === 0}
+        >
+          <IconCaretLeft />
+        </ActionIcon>
+        <Slider
+          flex={"auto"}
+          min={0}
+          max={totalSteps}
+          value={step}
+          onChange={setStep}
+        />
+        <ActionIcon
+          onClick={() => setStep(step + 1)}
+          variant="transparent"
+          disabled={step === totalSteps}
+        >
+          <IconCaretRight />
+        </ActionIcon>
+      </Group>
+    </Box>
   );
 };
 
