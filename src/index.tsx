@@ -4,6 +4,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import "@mantine/dropzone/styles.css";
 
 // const theme = createTheme({
 // });

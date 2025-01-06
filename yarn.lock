@@ -1605,6 +1605,13 @@
     react-textarea-autosize "8.5.5"
     type-fest "^4.27.0"
 
+"@mantine/dropzone@^7.15.2":
+  version "7.15.2"
+  resolved "https://registry.yarnpkg.com/@mantine/dropzone/-/dropzone-7.15.2.tgz#bedc2dcf1b193f36d59edbe339177d927e90c0a5"
+  integrity sha512-6jT1tFfUEhjWeZywohC8OMJnii0omOnqlqqGMQc0MZBpdMQmmTGJ3Z6oLkCadVH97FrROm8rtUOnMSA9CqiAGw==
+  dependencies:
+    react-dropzone-esm "15.2.0"
+
 "@mantine/form@^7.15.2":
   version "7.15.2"
   resolved "https://registry.yarnpkg.com/@mantine/form/-/form-7.15.2.tgz#0f243ecef13aea6d7a6a5adf9a96280e5bd4644d"
@@ -2273,6 +2280,13 @@
   version "2019.7.3"
   resolved "https://registry.yarnpkg.com/@types/offscreencanvas/-/offscreencanvas-2019.7.3.tgz#90267db13f64d6e9ccb5ae3eac92786a7c77a516"
   integrity sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==
+
+"@types/papaparse@^5.3.15":
+  version "5.3.15"
+  resolved "https://registry.yarnpkg.com/@types/papaparse/-/papaparse-5.3.15.tgz#7cafa16757a1d121422deefbb10b6310b224ecc4"
+  integrity sha512-JHe6vF6x/8Z85nCX4yFdDslN11d+1pr12E526X8WAfhadOeaOTx5AuIkvDKIBopfvlzpzkdMx4YyvSKCM9oqtw==
+  dependencies:
+    "@types/node" "*"
 
 "@types/parse-json@^4.0.0":
   version "4.0.2"
@@ -7412,6 +7426,11 @@ package-json-from-dist@^1.0.0:
   resolved "https://registry.yarnpkg.com/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz#4f1471a010827a86f94cfd9b0727e36d267de505"
   integrity sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==
 
+papaparse@^5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.4.1.tgz#f45c0f871853578bd3a30f92d96fdcfb6ebea127"
+  integrity sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==
+
 param-case@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/param-case/-/param-case-3.0.4.tgz#7d17fe4aa12bde34d4a77d91acfb6219caad01c5"
@@ -8350,6 +8369,13 @@ react-dom@18:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
+
+react-dropzone-esm@15.2.0:
+  version "15.2.0"
+  resolved "https://registry.yarnpkg.com/react-dropzone-esm/-/react-dropzone-esm-15.2.0.tgz#a2bf703796f083282fe98429ae01a2cdd761aa2a"
+  integrity sha512-pPwR8xWVL+tFLnbAb8KVH5f6Vtl397tck8dINkZ1cPMxHWH+l9dFmIgRWgbh7V7jbjIcuKXCsVrXbhQz68+dVA==
+  dependencies:
+    prop-types "^15.8.1"
 
 react-error-overlay@^6.0.11:
   version "6.0.11"

@@ -97,7 +97,7 @@ const BoxModal = ({ box, opened, onClose, onSubmit, title }: BoxModalProps) => {
           label="Enabled for packing?"
           {...form.getInputProps("enabled", { type: "checkbox" })}
         />
-        <Group display={"flex"} justify="flex-end" mt={"1rem"}>
+        <Group display={"flex"} justify="flex-end" mt={"md"}>
           <Button variant="default" onClick={onClose}>
             Cancel
           </Button>
