@@ -87,6 +87,17 @@ export const pack = (
     packedItems: [],
   }));
   allPackedItems.forEach((pi) => packedBoxes[pi.boxIdx].packedItems.push(pi));
+  packedBoxes.forEach((pb) =>
+    pb.packedItems.sort((pba, pbb) => {
+      if (pba.offset.z !== pbb.offset.z) {
+        return pba.offset.z - pbb.offset.z;
+      } else if (pba.offset.y !== pbb.offset.y) {
+        return pba.offset.y - pbb.offset.y;
+      } else {
+        return pba.offset.x - pbb.offset.x;
+      }
+    })
+  );
 
   return packedBoxes;
 };
