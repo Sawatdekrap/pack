@@ -36,14 +36,14 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
 
     return (
       <>
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.7} />
         <pointLight
           position={[4, 8, 4]}
-          intensity={70}
+          intensity={80}
           color={"white"}
           castShadow
         />
-        <group scale={scale} position={[0, 1, 0]}>
+        <group scale={scale} position={[0, (boxDims.depth * scale) / 2, 0]}>
           <BoxMesh box={packedBox.box} />
           {packedBox.packedItems.map((packedItem, idx) => {
             if (idx >= step) {
@@ -52,18 +52,18 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
 
             const itemDims = [
               packedItem.dimensions.length,
-              packedItem.dimensions.width,
               packedItem.dimensions.depth,
+              packedItem.dimensions.width,
             ] as [number, number, number];
             const position = offsetDimensionsInBox(
-              [packedItem.offset.x, packedItem.offset.y, packedItem.offset.z],
+              [packedItem.offset.x, packedItem.offset.z, packedItem.offset.y],
               itemDims,
-              [boxDims.length, boxDims.width, boxDims.depth]
+              [boxDims.length, boxDims.depth, boxDims.width]
             );
             const segments = [
               packedItem.pattern.long,
-              packedItem.pattern.wide,
               packedItem.pattern.deep,
+              packedItem.pattern.wide,
             ] as [number, number, number];
             return idx === step - 1 ? (
               <PreviewItemMesh

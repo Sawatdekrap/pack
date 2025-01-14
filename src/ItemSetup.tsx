@@ -5,7 +5,6 @@ import { ItemGroupItf } from "./interfaces";
 import {
   ActionIcon,
   Button,
-  FileButton,
   Group,
   NumberInput,
   Paper,
@@ -22,6 +21,40 @@ import { EMPTY_ITEM_GROUP } from "./data";
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
 import ItemModal from "./components/ItemModal";
 import CSVImportModal from "./components/CSVImportModal";
+
+const ITEM_COLUMNS = ["name", "length", "width", "depth"];
+
+const validateItemData = (data: any[]): [any[], string] => {
+  const missingColumns = ITEM_COLUMNS.filter((c) => !(c in data[0]));
+  if (missingColumns.length > 0) {
+    console.log(missingColumns);
+    return [data, `Columns must include ${ITEM_COLUMNS.join(", ")}`];
+  }
+  let error = "";
+  const validatedData = [];
+  for (let i = 0; i < data.length; i++) {
+    const row = data[i];
+    if (typeof row["name"] != "string") {
+      error = `Row ${i}: name must be a string`;
+    }
+    const length = parseFloat(row["length"]);
+    const width = parseFloat(row["width"]);
+    const depth = parseFloat(row["depth"]);
+    if (length <= 0 || width <= 0 || depth <= 0) {
+      error = `Row ${i}: dimensinos must be a number and greater than 0`;
+    }
+
+    if (error) break;
+    validatedData.push({
+      name: row["name"],
+      length: length,
+      width: width,
+      depth: depth,
+    });
+  }
+
+  return [validatedData, error];
+};
 
 interface ItemInline {
   name: string;
@@ -187,6 +220,7 @@ const ItemSetup = () => {
           onClose={() => setItemImportOpened(false)}
           title="Import Items"
           onSubmit={bulkImportItems}
+          onValidate={validateItemData}
         />
       </Paper>
     </>

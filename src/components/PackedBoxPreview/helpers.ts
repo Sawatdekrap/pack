@@ -38,5 +38,5 @@ export const colorFromString = (str: string): string => {
   const hue = str.split("").reduce((acc, char) => {
     return Math.floor(acc * char.charCodeAt(0)) % 360;
   }, 1);
-  return `hsl(${hue}, 100%, 90%)`;
+  return `hsl(${hue}, 100%, 80%)`;
 };

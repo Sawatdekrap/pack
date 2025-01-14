@@ -4,20 +4,22 @@ import { IconExclamationCircle, IconUpload } from "@tabler/icons-react";
 import { useState } from "react";
 import * as Papa from "papaparse";
 
-interface CSVImportModalProps<T> {
+interface CSVImportModalProps {
   opened: boolean;
   onClose: () => void;
   title: string;
-  onSubmit: (data: T[]) => void;
+  onSubmit: (data: any[]) => void;
+  onValidate: (data: any[]) => [any[], string];
 }
 
-function CSVImportModal<T>({
+function CSVImportModal({
   opened,
   onClose,
   title,
   onSubmit,
-}: CSVImportModalProps<T>) {
-  const [data, setData] = useState<T[] | undefined>();
+  onValidate,
+}: CSVImportModalProps) {
+  const [data, setData] = useState<any[] | undefined>();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,15 +30,16 @@ function CSVImportModal<T>({
     file
       .text()
       .then((text) => {
+        setData(undefined);
         setError("");
-        Papa.parse<T>(text, {
+        Papa.parse(text, {
           header: true,
           dynamicTyping: true,
           skipEmptyLines: true,
           complete(results) {
             if (results.data) {
-              console.log(results.data);
-              setData(results.data);
+              const [validatedData, validateError] = onValidate(results.data);
+              validateError ? setError(validateError) : setData(validatedData);
             } else {
               setError("Incomplete CSV");
             }

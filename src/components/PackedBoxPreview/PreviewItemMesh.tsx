@@ -20,7 +20,7 @@ const PreviewItemMesh = ({
 }: PreviewItemMeshProps) => {
   const floatPosition = [
     position[0],
-    boxHeight * 1.1 + dimensions[1] / 2,
+    boxHeight / 1.5 + dimensions[1] / 2,
     position[2],
   ] as [number, number, number];
 
@@ -43,7 +43,12 @@ const PreviewItemMesh = ({
       <mesh position={position}>
         <boxGeometry args={dimensions} />
         <meshStandardMaterial color={"white"} transparent opacity={0.4} />
-        <Edges lineWidth={1} color={"black"} />
+        <Edges
+          dashed
+          dashSize={dimensions[0] / 10}
+          lineWidth={1}
+          color={"black"}
+        />
       </mesh>
     </group>
   );
