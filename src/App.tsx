@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppShell,
   Button,
@@ -9,6 +9,7 @@ import {
   Group,
   Image,
   Paper,
+  Space,
   Stack,
   ThemeIcon,
   Title,
@@ -23,7 +24,7 @@ import CustomTable from "./components/CustomTable";
 import { useAtom } from "jotai";
 import { boxesAtom, itemGroupsAtom, packedBoxesAtom } from "./atoms";
 import { pack } from "./algo/pack";
-import { PackedBoxItf } from "./interfaces";
+import { PackedBoxItf, PackedStats } from "./interfaces";
 import { PackedBoxProvider, usePackedBox } from "./contexts/PackedBoxContext";
 import PackedBoxPreview from "./components/PackedBoxPreview";
 import { colorFromString } from "./components/PackedBoxPreview/helpers";
@@ -31,6 +32,7 @@ import logo from "./boxPackerLogo.svg";
 import PackedBoxModal from "./components/PackedBoxModal";
 import BoxSetup from "./BoxSetup";
 import ItemSetup from "./ItemSetup";
+import { getStats } from "./contexts/PackedBoxContext/helper";
 
 interface PackedBoxProps {
   packedBox: PackedBoxItf;
@@ -66,16 +68,17 @@ const App = () => {
   const [boxes, _setBoxes] = useAtom(boxesAtom);
   const [itemGroups, _setItemGroups] = useAtom(itemGroupsAtom);
   const [packedBoxes, setPackedBoxes] = useAtom(packedBoxesAtom);
+  const [packedStats, setPackedStats] = useState<PackedStats | undefined>();
 
   const onPack = () => {
     if (boxes.length === 0 || itemGroups.length === 0) return;
-    setPackedBoxes(
-      pack(
-        boxes.filter((b) => b.enabled),
-        itemGroups,
-        1.1
-      )
+    const packedBoxes = pack(
+      boxes.filter((b) => b.enabled),
+      itemGroups,
+      1.1
     );
+    setPackedBoxes(packedBoxes);
+    setPackedStats(getStats(packedBoxes));
   };
 
   return (
@@ -102,50 +105,53 @@ const App = () => {
               Pack
             </Button>
           </Group>
-          {packedBoxes.length === 0 ? (
-            <div>Awaiting preview...</div>
-          ) : (
+          {packedBoxes.length > 0 && (
             <>
-              <Grid mt={"md"}>
-                <GridCol span={4}>
-                  <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
-                    <Title order={4}>Boxes used</Title>
-                    <Title order={1} ta={"center"}>
-                      <ThemeIcon variant="white" size={"xl"}>
-                        <IconPackage />
-                      </ThemeIcon>
-                      {packedBoxes.length}
-                    </Title>
-                  </Paper>
-                </GridCol>
-                <GridCol span={4}>
-                  <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
-                    <Title order={4}>Most Items per Box</Title>
-                    <Title order={1} ta={"center"}>
-                      <ThemeIcon variant="white" size={"xl"}>
-                        <IconMilk />
-                      </ThemeIcon>
-                      12
-                    </Title>
-                  </Paper>
-                </GridCol>
-                <GridCol span={4}>
-                  <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
-                    <Title order={4}>Space used</Title>
-                    <Title order={1} ta={"center"}>
-                      <ThemeIcon variant="white" size={"xl"}>
-                        <IconPercentage70 />
-                      </ThemeIcon>
-                      70%
-                    </Title>
-                  </Paper>
-                </GridCol>
-              </Grid>
+              {packedStats && (
+                <Grid mt={"md"}>
+                  <GridCol span={4}>
+                    <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
+                      <Title order={4}>Boxes used</Title>
+                      <Title order={1} ta={"center"}>
+                        <ThemeIcon variant="white" size={"xl"}>
+                          <IconPackage />
+                        </ThemeIcon>
+                        {packedStats.totalBoxes}
+                      </Title>
+                    </Paper>
+                  </GridCol>
+                  <GridCol span={4}>
+                    <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
+                      <Title order={4}>Most Items per Box</Title>
+                      <Title order={1} ta={"center"}>
+                        <ThemeIcon variant="white" size={"xl"}>
+                          <IconMilk />
+                        </ThemeIcon>
+                        {packedStats.mostItemsPerBox}
+                      </Title>
+                    </Paper>
+                  </GridCol>
+                  <GridCol span={4}>
+                    <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
+                      <Title order={4}>Space used</Title>
+                      <Title order={1} ta={"center"}>
+                        <ThemeIcon variant="white" size={"xl"}>
+                          <IconPercentage70 />
+                        </ThemeIcon>
+                        {packedStats.spaceUsed}
+                        {" %"}
+                      </Title>
+                    </Paper>
+                  </GridCol>
+                </Grid>
+              )}
+
               {packedBoxes.map((pb, pbIdx) => (
                 <PackedBoxProvider key={pbIdx} packedBox={pb}>
                   <PackedBox packedBox={pb} />
                 </PackedBoxProvider>
               ))}
+              <Space h={"30vh"} />
             </>
           )}
         </Container>

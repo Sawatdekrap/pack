@@ -73,3 +73,9 @@ export interface PackedBoxItf {
   box: BoxItf;
   packedItems: PackedItemsItf[];
 }
+
+export interface PackedStats {
+  totalBoxes: number;
+  mostItemsPerBox: number;
+  spaceUsed: number;
+}

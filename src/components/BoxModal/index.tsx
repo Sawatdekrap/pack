@@ -55,7 +55,6 @@ const BoxModal = ({ box, opened, onClose, onSubmit, title }: BoxModalProps) => {
 
   useEffect(() => {
     const values = box ? valuesFromBox(box) : valuesFromBox(EMPTY_BOX);
-    console.log(JSON.stringify(values));
     form.setValues(values);
   }, [box]);
 
