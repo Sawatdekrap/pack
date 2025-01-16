@@ -15,6 +15,7 @@ import {
   Title,
 } from "@mantine/core";
 import {
+  IconInfoCircle,
   IconMilk,
   IconPackage,
   IconPackages,
@@ -33,6 +34,7 @@ import PackedBoxModal from "./components/PackedBoxModal";
 import BoxSetup from "./BoxSetup";
 import ItemSetup from "./ItemSetup";
 import { getStats } from "./contexts/PackedBoxContext/helper";
+import InfoModal from "./components/InfoModal";
 
 interface PackedBoxProps {
   packedBox: PackedBoxItf;
@@ -65,10 +67,11 @@ const PackedBox = ({ packedBox }: PackedBoxProps) => {
 };
 
 const App = () => {
-  const [boxes, _setBoxes] = useAtom(boxesAtom);
-  const [itemGroups, _setItemGroups] = useAtom(itemGroupsAtom);
+  const [boxes] = useAtom(boxesAtom);
+  const [itemGroups] = useAtom(itemGroupsAtom);
   const [packedBoxes, setPackedBoxes] = useAtom(packedBoxesAtom);
   const [packedStats, setPackedStats] = useState<PackedStats | undefined>();
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const onPack = () => {
     if (boxes.length === 0 || itemGroups.length === 0) return;
@@ -84,8 +87,21 @@ const App = () => {
   return (
     <AppShell header={{ height: 60 }} mih={"100vh"} padding={"md"}>
       <AppShell.Header>
-        <Group display={"flex"} align="center" h={"100%"}>
+        <Group
+          display={"flex"}
+          align="center"
+          h={"100%"}
+          justify="space-between"
+        >
           <Image src={logo} alt="logo" w={"200px"} ml={"md"} />
+          <Button
+            leftSection={<IconInfoCircle />}
+            variant="transparent"
+            onClick={() => setInfoOpen(true)}
+          >
+            What is this?
+          </Button>
+          <InfoModal opened={infoOpen} onClose={() => setInfoOpen(false)} />
         </Group>
       </AppShell.Header>
       <AppShell.Main bg={"#fdfdfd"}>
