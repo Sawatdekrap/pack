@@ -146,6 +146,22 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
                 <li>Otherwise, move to the next congruency group</li>
               </ul>
             </li>
+            <li>
+              When all congruency groups have been packed, for items packed in
+              the same box, try to find smaller boxes that fit the bounding
+              dimensions of the packed items
+              <ul>
+                <li>
+                  The items may have been packed in a larger box than necessary,
+                  especially with no backtracking, etc.
+                </li>
+                <li>
+                  If a smaller box is found that fits the bounding dims of the
+                  packed items (including with rotation), assign to that box
+                  instead
+                </li>
+              </ul>
+            </li>
             <li>Finished</li>
           </ul>
         </Text>

@@ -1,6 +1,6 @@
 # TODO
-- [ ] CSV export / local save
 
 # Meh
+- [ ] CSV export / local save
 - [ ] Show packed items list in fullscreen view
 - [ ] Smaller separate files
