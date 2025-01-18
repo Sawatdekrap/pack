@@ -9,6 +9,7 @@ import * as _cg from "./utils/congruencyGroup";
 import * as _d from "./utils/dimensions";
 import * as _s from "./utils/space";
 import * as _pi from "./utils/packedItems";
+import * as _p from "./utils/point";
 
 const compDimsKey = (dimensions: DimensionsItf): number =>
   dimensions.length ** 2 + dimensions.width ** 2 + dimensions.depth ** 2;
@@ -262,12 +263,23 @@ const reduceFinalFit = (
 ): PackedBoxItf => {
   const boundingDimensions = _pi.getBoundingDims(packedBox.packedItems);
   const finalBox = sortedBoxes.find((b) => {
-    return _d.fitsStrictly(b.dimensions, boundingDimensions);
+    return _d.fitOrientations(b.dimensions, boundingDimensions).length > 0;
   });
-  if (finalBox === undefined) return packedBox;
+  if (finalBox === undefined) return packedBox; // Shouldn't hit this but nice safeguard
+
+  const rotateOrientation = _d.fitOrientations(
+    finalBox.dimensions,
+    boundingDimensions
+  )[0];
+  const rotatedPackedItems = packedBox.packedItems.map((pi) => ({
+    ...pi,
+    dimensions: _d.rotate(pi.dimensions, rotateOrientation),
+    offset: _p.rotate(pi.offset, rotateOrientation),
+  }));
 
   return {
     ...packedBox,
     box: finalBox,
+    packedItems: rotatedPackedItems,
   };
 };
