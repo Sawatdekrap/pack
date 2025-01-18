@@ -20,7 +20,8 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
           You can see the original Python script I used{" "}
           <Anchor href="/pack.py">HERE</Anchor>, and you can see my MIP (Mixed
           Integer Programming) implementation{" "}
-          <Anchor href="/mip.py">HERE</Anchor>
+          <Anchor href="/mip.py">HERE</Anchor> (Which can be extended to
+          multi-box)
         </Text>
 
         <Title order={2}>Why?</Title>
@@ -28,14 +29,14 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
           Box packing is a very interesting problem, and there's actually a
           really large amount of research into how to do it better -
           specifically more-optimal packing. Really this makes sense because
-          shipping and storage costs for delivered products are quite high, even
-          relative to the cost of the item itself!
+          shipping and storage costs for delivered products are quite high
+          relative to the cost of the items being shipped/stored themselves!
         </Text>
         <Text>
           I've seen a few solutions for packing boxes in the logistics industry
-          - some very <i>very</i> lackluster and limited. Very few people it
-          seems are doing anything too interesting, so I thought I would ask
-          around and mock up some demos.
+          - some being very <i>very</i> lackluster and <i>very</i> limited. It
+          seems very few people are doing anything too interesting, in this
+          space, so I thought I would ask around and mock up some demos.
         </Text>
         <Text>
           Also I just wanted to try out some React again. It's by no means
@@ -164,7 +165,10 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
           site, but congratulations! Here's a list of some bugs you may
           experience:
           <ul>
-            <li>Too many packed boxes fail to render the preview</li>
+            <li>
+              Too many packed boxes fail to render the preview (although lots of
+              items should be ok!)
+            </li>
             <li>3D preview glitches</li>
             <li>CSV import fails</li>
             <li>Buggy UI behaviour</li>
@@ -239,11 +243,20 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
 
         <Title order={2}>References</Title>
         <Text>
-          There were a lot of resources I used to get me up to speed to give
+          There were a few related resources I used to get me up to speed for my
+          work talk
         </Text>
         <Text>
           <ul>
-            <li>Papers! I have them somewhere... I'll find them</li>
+            <li>
+              <Anchor href="https://www.researchgate.net/publication/220340260_A_MIP_approach_for_some_practical_packing_problems_Balancing_constraints_and_tetris-like_items">
+                (Paper) A MIP Approach for some Practical Packing Problems:
+                Balancing Constraints and Tetris-like Items
+              </Anchor>
+            </li>
+            <li>
+              <Anchor href="https://www.python-mip.com/">Python MIP</Anchor>
+            </li>
           </ul>
         </Text>
       </Stack>
