@@ -26,7 +26,7 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
   const cameraRef = useRef<CameraControls>(null);
 
   const resetCamera = () => {
-    cameraRef?.current?.setLookAt(-3, 4, 3, 0, 2, 0, true);
+    cameraRef?.current?.setLookAt(3, 4, 3, 0, 0, 0, true);
   };
 
   const renderedDisplay = useMemo(() => {

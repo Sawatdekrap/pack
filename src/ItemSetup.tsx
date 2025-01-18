@@ -4,10 +4,12 @@ import { useState } from "react";
 import { ItemGroupItf } from "./interfaces";
 import {
   ActionIcon,
+  Box,
   Button,
   Group,
   NumberInput,
   Paper,
+  Text,
   Title,
 } from "@mantine/core";
 import {
@@ -113,7 +115,15 @@ const ItemSetup = () => {
   };
 
   const itemData = itemGroups.map((i, igIdx) => ({
-    name: i.item.name,
+    name: (
+      <Box>
+        <Text>{i.item.name}</Text>
+        <Text size={"0.5rem"} c="dimmed">
+          {i.item.dimensions.length} x {i.item.dimensions.width} x{" "}
+          {i.item.dimensions.depth}
+        </Text>
+      </Box>
+    ),
     length: i.item.dimensions.length,
     width: i.item.dimensions.width,
     depth: i.item.dimensions.depth,
@@ -124,6 +134,7 @@ const ItemSetup = () => {
           setItemQuantity(igIdx, typeof val === "string" ? 0 : val)
         }
         min={0}
+        size="xs"
       />
     ),
     actions: (
@@ -166,10 +177,15 @@ const ItemSetup = () => {
         <CustomTable
           columns={[
             { key: "name", title: "Name" },
-            { key: "length", title: "Length", width: "100px" },
-            { key: "width", title: "Width", width: "100px" },
-            { key: "depth", title: "Depth", width: "100px" },
-            { key: "quantity", title: "Qty", width: "100px" },
+            {
+              key: "length",
+              title: "Length",
+              width: "100px",
+              hideMobile: true,
+            },
+            { key: "width", title: "Width", width: "100px", hideMobile: true },
+            { key: "depth", title: "Depth", width: "100px", hideMobile: true },
+            { key: "quantity", title: "Qty", width: "80px" },
             { key: "actions", title: "", width: "80px" },
           ]}
           data={itemData}

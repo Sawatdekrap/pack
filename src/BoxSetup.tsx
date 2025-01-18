@@ -2,7 +2,16 @@ import { useAtom } from "jotai";
 import { boxesAtom } from "./atoms";
 import { useState } from "react";
 import { BoxItf } from "./interfaces";
-import { ActionIcon, Button, Group, Paper, Switch, Title } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Group,
+  Paper,
+  Switch,
+  Text,
+  Title,
+} from "@mantine/core";
 import {
   IconEdit,
   IconFileTypeCsv,
@@ -102,7 +111,14 @@ const BoxSetup = () => {
   };
 
   const boxData = boxes.map((b, bIdx) => ({
-    name: b.name,
+    name: (
+      <Box>
+        <Text>{b.name}</Text>
+        <Text size={"0.5rem"} c="dimmed" hiddenFrom="sm">
+          {b.dimensions.length} x {b.dimensions.width} x {b.dimensions.depth}
+        </Text>
+      </Box>
+    ),
     length: b.dimensions.length,
     width: b.dimensions.width,
     depth: b.dimensions.depth,
@@ -110,6 +126,7 @@ const BoxSetup = () => {
       <Switch
         checked={b.enabled}
         onChange={() => setBoxEnabled(bIdx, !b.enabled)}
+        size="xs"
       />
     ),
     actions: (
@@ -152,10 +169,15 @@ const BoxSetup = () => {
         <CustomTable
           columns={[
             { key: "name", title: "Name" },
-            { key: "length", title: "Length", width: "100px" },
-            { key: "width", title: "Width", width: "100px" },
-            { key: "depth", title: "Depth", width: "100px" },
-            { key: "enabled", title: "Enabled", width: "80px" },
+            {
+              key: "length",
+              title: "Length",
+              width: "100px",
+              hideMobile: true,
+            },
+            { key: "width", title: "Width", width: "100px", hideMobile: true },
+            { key: "depth", title: "Depth", width: "100px", hideMobile: true },
+            { key: "enabled", title: "Use?", width: "50px" },
             { key: "actions", title: "", width: "80px" },
           ]}
           data={boxData}

@@ -4,6 +4,7 @@ interface ColumnItf {
   key: string;
   title: string;
   width?: string;
+  hideMobile?: boolean;
 }
 
 interface CustomTableProps {
@@ -18,7 +19,11 @@ const CustomTable = ({ columns, data, emptyElement }: CustomTableProps) => {
       <Table.Thead>
         <Table.Tr>
           {columns.map((c) => (
-            <Table.Th key={c.key} w={c.width}>
+            <Table.Th
+              key={c.key}
+              w={c.width}
+              visibleFrom={c.hideMobile ? "sm" : undefined}
+            >
               {c.title}
             </Table.Th>
           ))}
@@ -28,7 +33,12 @@ const CustomTable = ({ columns, data, emptyElement }: CustomTableProps) => {
         {data.map((row, rowIdx) => (
           <Table.Tr key={rowIdx}>
             {columns.map((c) => (
-              <Table.Td key={c.title}>{row[c.key]}</Table.Td>
+              <Table.Td
+                key={c.title}
+                visibleFrom={c.hideMobile ? "sm" : undefined}
+              >
+                {row[c.key]}
+              </Table.Td>
             ))}
           </Table.Tr>
         ))}

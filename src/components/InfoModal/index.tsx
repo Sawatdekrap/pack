@@ -1,4 +1,4 @@
-import { Anchor, Modal, Stack, Text, Title } from "@mantine/core";
+import { Anchor, List, Modal, Stack, Text, Title } from "@mantine/core";
 
 interface InfoModalProps {
   opened: boolean;
@@ -61,110 +61,113 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
           happening (although I think the Python files linked above are much
           easier to read).
         </Text>
-        <Text>
-          At a high-level this is the flow:
-          <ul>
-            <li>
-              Sort boxes by descending "unweildy-ness"
-              <ul>
-                <li>
-                  This is super vague because there's a few things you can sort
-                  by
-                </li>
-                <li>I ended up using the measure l^2 * h^2 * d^2</li>
-                <li>
-                  This dealt nicely-enough with both large volumes and single
-                  large dimensions
-                </li>
-              </ul>
-            </li>
-            <li>
-              Group items into "concurrency groups" (items with the same
-              dimensions with rotation)
-              <ul>
-                <li>
-                  For super complex packing that leaves lots of empty space
-                  around, this can be helped a little by allowing items slightly
-                  smaller to be grouped
-                </li>
-              </ul>
-            </li>
-            <li>
-              Find a suitable empty space to use
-              <ul>
-                <li>
-                  Existing empty space is searched by volume ascending, and must
-                  be able to fit at least one item in the congruency group in at
-                  least one orientation
-                </li>
-                <li>In the beginning there is no empty space available</li>
-                <li>
-                  When there's no empty space, use a new box as the empty space
-                </li>
-                <li>
-                  There's a few ways to choose the right box here. I'm very lazy
-                  and choose something slightly larger than could minimally hold
-                  all the remaining items' volume
-                </li>
-              </ul>
-            </li>
-            <li>
-              Generate the ways the congruency group could be packed into the
-              selected space
-              <ul>
-                <li>
-                  Try all possible orientations and pack as much as possible
-                </li>
-              </ul>
-            </li>
-            <li>
-              Generate all the remaining space that would be left over using the
-              generated packings
-              <ul>
-                <li>
-                  Packing one box into another, the remaining space can be split
-                  into 3 boxes of space
-                </li>
-              </ul>
-            </li>
-            <li>
-              Select the best packing and remaining space combo
-              <ul>
-                <li>
-                  This is based on total packable items, and if tied, the
-                  packing that gives the largest box of remaining space
-                </li>
-              </ul>
-            </li>
-            <li>
-              Add our new space to our collection of usable space, and continue
-              <ul>
-                <li>
-                  If not all items in the congruency group could be packed,
-                  continue until they are
-                </li>
-                <li>Otherwise, move to the next congruency group</li>
-              </ul>
-            </li>
-            <li>
-              When all congruency groups have been packed, for items packed in
-              the same box, try to find smaller boxes that fit the bounding
-              dimensions of the packed items
-              <ul>
-                <li>
-                  The items may have been packed in a larger box than necessary,
-                  especially with no backtracking, etc.
-                </li>
-                <li>
-                  If a smaller box is found that fits the bounding dims of the
-                  packed items (including with rotation), assign to that box
-                  instead
-                </li>
-              </ul>
-            </li>
-            <li>Finished</li>
-          </ul>
-        </Text>
+        <Text>At a high-level this is the flow:</Text>
+        <List>
+          <List.Item>
+            Sort boxes by descending "unweildy-ness"
+            <List>
+              <List.Item>
+                This is super vague because there's a few things you can sort by
+              </List.Item>
+              <List.Item>
+                I ended up using the measure l^2 * h^2 * d^2
+              </List.Item>
+              <List.Item>
+                This dealt nicely-enough with both large volumes and single
+                large dimensions
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            Group items into "concurrency groups" (items with the same
+            dimensions with rotation)
+            <List>
+              <List.Item>
+                For super complex packing that leaves lots of empty space
+                around, this can be helped a little by allowing items slightly
+                smaller to be grouped
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            Find a suitable empty space to use
+            <List>
+              <List.Item>
+                Existing empty space is searched by volume ascending, and must
+                be able to fit at least one item in the congruency group in at
+                least one orientation
+              </List.Item>
+              <List.Item>
+                In the beginning there is no empty space available
+              </List.Item>
+              <List.Item>
+                When there's no empty space, use a new box as the empty space
+              </List.Item>
+              <List.Item>
+                There's a few ways to choose the right box here. I'm very lazy
+                and choose something slightly larger than could minimally hold
+                all the remaining items' volume
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            Generate the ways the congruency group could be packed into the
+            selected space
+            <List>
+              <List.Item>
+                Try all possible orientations and pack as much as possible
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            Generate all the remaining space that would be left over using the
+            generated packings
+            <List>
+              <List.Item>
+                Packing one box into another, the remaining space can be split
+                into 3 boxes of space
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            Select the best packing and remaining space combo
+            <List>
+              <List.Item>
+                This is based on total packable items, and if tied, the packing
+                that gives the largest box of remaining space
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            Add our new space to our collection of usable space, and continue
+            <List>
+              <List.Item>
+                If not all items in the congruency group could be packed,
+                continue until they are
+              </List.Item>
+              <List.Item>
+                Otherwise, move to the next congruency group
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>
+            When all congruency groups have been packed, for items packed in the
+            same box, try to find smaller boxes that fit the bounding dimensions
+            of the packed items
+            <List>
+              <List.Item>
+                The items may have been packed in a larger box than necessary,
+                especially with no backtracking, etc.
+              </List.Item>
+              <List.Item>
+                If a smaller box is found that fits the bounding dims of the
+                packed items (including with rotation), assign to that box
+                instead
+              </List.Item>
+            </List>
+          </List.Item>
+          <List.Item>Finished!</List.Item>
+        </List>
 
         <Title order={2}>FAQ</Title>
         <Title order={5}>Will this always pack my boxes optimally?</Title>
@@ -180,53 +183,47 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
           I spent very little time accouting for edge cases or ways to break the
           site, but congratulations! Here's a list of some bugs you may
           experience:
-          <ul>
-            <li>
-              Too many packed boxes fail to render the preview (although lots of
-              items should be ok!)
-            </li>
-            <li>3D preview glitches</li>
-            <li>CSV import fails</li>
-            <li>Buggy UI behaviour</li>
-            <li>
-              <i>Your bug here ✨</i>
-            </li>
-          </ul>
         </Text>
+        <List>
+          <List.Item>
+            Too many packed boxes fail to render the preview (although lots of
+            items should be ok!)
+          </List.Item>
+          <List.Item>3D preview glitches</List.Item>
+          <List.Item>CSV import fails</List.Item>
+          <List.Item>Buggy UI behaviour</List.Item>
+          <List.Item>
+            <i>Your bug here ✨</i>
+          </List.Item>
+        </List>
 
         <Title order={5}>Will you fix/change/update anything?</Title>
         <Text>Maybe</Text>
 
         <Title order={5}>What was used to build the site?</Title>
-        <Text>
-          <ul>
-            <li>
-              Web framework: <Anchor href="https://react.dev/">React</Anchor>
-            </li>
-            <li>
-              Component Library:{" "}
-              <Anchor href="https://mantine.dev/">Mantine</Anchor>
-            </li>
-            <li>
-              3D:{" "}
-              <Anchor href="https://r3f.docs.pmnd.rs/">
-                React Three Fiber
-              </Anchor>
-            </li>
-            <li>
-              Other: <Anchor href="https://jotai.org/">jotai (state)</Anchor>,{" "}
-              <Anchor href="https://www.papaparse.com/">
-                Papaparse (CSVs)
-              </Anchor>
-            </li>
-            <li>
-              Hosting:{" "}
-              <Anchor href="https://github.com/gitname/react-gh-pages">
-                React Github Pages
-              </Anchor>
-            </li>
-          </ul>
-        </Text>
+        <List>
+          <List.Item>
+            Web framework: <Anchor href="https://react.dev/">React</Anchor>
+          </List.Item>
+          <List.Item>
+            Component Library:{" "}
+            <Anchor href="https://mantine.dev/">Mantine</Anchor>
+          </List.Item>
+          <List.Item>
+            3D:{" "}
+            <Anchor href="https://r3f.docs.pmnd.rs/">React Three Fiber</Anchor>
+          </List.Item>
+          <List.Item>
+            Other: <Anchor href="https://jotai.org/">jotai (state)</Anchor>,{" "}
+            <Anchor href="https://www.papaparse.com/">Papaparse (CSVs)</Anchor>
+          </List.Item>
+          <List.Item>
+            Hosting:{" "}
+            <Anchor href="https://github.com/gitname/react-gh-pages">
+              React Github Pages
+            </Anchor>
+          </List.Item>
+        </List>
 
         <Title order={5}>Do things like this already exist?</Title>
         <Text>
@@ -234,31 +231,29 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
           commercial solutions that do similar things. You can find them just by
           typing "box packing API" in Google.
         </Text>
+        <Text>Here's a few I've seen, some more interesting than others:</Text>
+        <List>
+          <List.Item>
+            <Anchor href="https://github.com/skjolber/3d-bin-container-packing">
+              3d bin container packing
+            </Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor href="https://boxpacker.io/en/stable/">boxpacker.io</Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor href="https://xserver2-dashboard.cloud.ptvgroup.com/dashboard/Content/Showcases/LoadingOptimization/InteractiveVisualization/index.htm">
+              Interactive 3D visualisation
+            </Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor href="https://docs.paccurate.io/">paccurate.io</Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor href="https://3dpack.ing/">3dpack.ing</Anchor>
+          </List.Item>
+        </List>
         <Text>
-          Here's a few I've seen, some more interesting than others:
-          <ul>
-            <li>
-              <Anchor href="https://github.com/skjolber/3d-bin-container-packing">
-                3d bin container packing
-              </Anchor>
-            </li>
-            <li>
-              <Anchor href="https://boxpacker.io/en/stable/">
-                boxpacker.io
-              </Anchor>
-            </li>
-            <li>
-              <Anchor href="https://xserver2-dashboard.cloud.ptvgroup.com/dashboard/Content/Showcases/LoadingOptimization/InteractiveVisualization/index.htm">
-                Interactive 3D visualisation
-              </Anchor>
-            </li>
-            <li>
-              <Anchor href="https://docs.paccurate.io/">paccurate.io</Anchor>
-            </li>
-            <li>
-              <Anchor href="https://3dpack.ing/">3dpack.ing</Anchor>
-            </li>
-          </ul>
           Note I don't vouch for any of these, I"m just saving you a google
           search.
         </Text>
@@ -268,24 +263,22 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
           There were a few related resources I used to get me up to speed for my
           work talk
         </Text>
-        <Text>
-          <ul>
-            <li>
-              <Anchor href="https://www.researchgate.net/publication/220340260_A_MIP_approach_for_some_practical_packing_problems_Balancing_constraints_and_tetris-like_items">
-                (Paper) A MIP Approach for some Practical Packing Problems:
-                Balancing Constraints and Tetris-like Items
-              </Anchor>
-            </li>
-            <li>
-              <Anchor href="https://www.researchgate.net/publication/226249396_A_New_Heuristic_Algorithm_for_the_3D_Bin_Packing_Problem">
-                (Paper) A New Heuristic Algorithm for the 3D Bin Packing Problem
-              </Anchor>
-            </li>
-            <li>
-              <Anchor href="https://www.python-mip.com/">Python MIP</Anchor>
-            </li>
-          </ul>
-        </Text>
+        <List>
+          <List.Item>
+            <Anchor href="https://www.researchgate.net/publication/220340260_A_MIP_approach_for_some_practical_packing_problems_Balancing_constraints_and_tetris-like_items">
+              (Paper) A MIP Approach for some Practical Packing Problems:
+              Balancing Constraints and Tetris-like Items
+            </Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor href="https://www.researchgate.net/publication/226249396_A_New_Heuristic_Algorithm_for_the_3D_Bin_Packing_Problem">
+              (Paper) A New Heuristic Algorithm for the 3D Bin Packing Problem
+            </Anchor>
+          </List.Item>
+          <List.Item>
+            <Anchor href="https://www.python-mip.com/">Python MIP</Anchor>
+          </List.Item>
+        </List>
       </Stack>
     </Modal>
   );

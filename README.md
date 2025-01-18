@@ -93,6 +93,7 @@ There were a few related resources I used to get me up to speed for my work talk
 - [Python MIP](https://www.python-mip.com/)
 
 # Todo eventually... maybe
+- [ ] ul cannot be a descendant of p error
 - [ ] CSV export / local save
 - [ ] Show packed items list in fullscreen view
 - [ ] Smaller separate files

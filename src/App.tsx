@@ -9,6 +9,7 @@ import {
   Group,
   Image,
   Paper,
+  SimpleGrid,
   Space,
   Stack,
   ThemeIcon,
@@ -21,6 +22,7 @@ import {
   IconPackages,
   IconPercentage70,
 } from "@tabler/icons-react";
+import { useMediaQuery } from "@mantine/hooks";
 import CustomTable from "./components/CustomTable";
 import { useAtom } from "jotai";
 import { boxesAtom, itemGroupsAtom, packedBoxesAtom } from "./atoms";
@@ -29,7 +31,7 @@ import { PackedBoxItf, PackedStats } from "./interfaces";
 import { PackedBoxProvider, usePackedBox } from "./contexts/PackedBoxContext";
 import PackedBoxPreview from "./components/PackedBoxPreview";
 import { colorFromString } from "./components/PackedBoxPreview/helpers";
-import logo from "./boxPackerLogo.svg";
+import logo from "./boxPackerLogo.png";
 import PackedBoxModal from "./components/PackedBoxModal";
 import BoxSetup from "./BoxSetup";
 import ItemSetup from "./ItemSetup";
@@ -57,7 +59,7 @@ const PackedBox = ({ packedBox }: PackedBoxProps) => {
           columns={[
             { key: "color", title: "", width: "43px" },
             { key: "name", title: "Name" },
-            { key: "quantity", title: "Quantity", width: "80px" },
+            { key: "quantity", title: "Qty", width: "70px" },
           ]}
           data={tableData}
         />
@@ -72,6 +74,8 @@ const App = () => {
   const [packedBoxes, setPackedBoxes] = useAtom(packedBoxesAtom);
   const [packedStats, setPackedStats] = useState<PackedStats | undefined>();
   const [infoOpen, setInfoOpen] = useState(false);
+
+  const mobile = useMediaQuery("(max-width: 375px)");
 
   const onPack = () => {
     if (boxes.length === 0 || itemGroups.length === 0) return;
@@ -93,7 +97,12 @@ const App = () => {
           h={"100%"}
           justify="space-between"
         >
-          <Image src={logo} alt="logo" w={"200px"} ml={"md"} />
+          <Image
+            src={logo}
+            alt="logo"
+            w={mobile ? "130px" : "200px"}
+            ml={"md"}
+          />
           <Button
             leftSection={<IconInfoCircle />}
             variant="transparent"
@@ -124,42 +133,40 @@ const App = () => {
           {packedBoxes.length > 0 && (
             <>
               {packedStats && (
-                <Grid mt={"md"}>
-                  <GridCol span={4}>
-                    <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
-                      <Title order={4}>Boxes used</Title>
-                      <Title order={1} ta={"center"}>
-                        <ThemeIcon variant="white" size={"xl"}>
-                          <IconPackage />
-                        </ThemeIcon>
-                        {packedStats.totalBoxes}
-                      </Title>
-                    </Paper>
-                  </GridCol>
-                  <GridCol span={4}>
-                    <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
-                      <Title order={4}>Most Items per Box</Title>
-                      <Title order={1} ta={"center"}>
-                        <ThemeIcon variant="white" size={"xl"}>
-                          <IconMilk />
-                        </ThemeIcon>
-                        {packedStats.mostItemsPerBox}
-                      </Title>
-                    </Paper>
-                  </GridCol>
-                  <GridCol span={4}>
-                    <Paper shadow="sm" p="sm" maw={"200px"} m={"auto"}>
-                      <Title order={4}>Space used</Title>
-                      <Title order={1} ta={"center"}>
-                        <ThemeIcon variant="white" size={"xl"}>
-                          <IconPercentage70 />
-                        </ThemeIcon>
-                        {packedStats.spaceUsed}
-                        {" %"}
-                      </Title>
-                    </Paper>
-                  </GridCol>
-                </Grid>
+                <SimpleGrid
+                  type="container"
+                  cols={{ base: 1, "700px": 3 }}
+                  spacing={{ base: 10, "300px": "xl" }}
+                >
+                  <Paper shadow="sm" p="sm" w={"200px"} m={"auto"}>
+                    <Title order={4}>Boxes used</Title>
+                    <Title order={1} ta={"center"}>
+                      <ThemeIcon variant="white" size={"xl"}>
+                        <IconPackage />
+                      </ThemeIcon>
+                      {packedStats.totalBoxes}
+                    </Title>
+                  </Paper>
+                  <Paper shadow="sm" p="sm" w={"200px"} m={"auto"}>
+                    <Title order={4}>Most Items per Box</Title>
+                    <Title order={1} ta={"center"}>
+                      <ThemeIcon variant="white" size={"xl"}>
+                        <IconMilk />
+                      </ThemeIcon>
+                      {packedStats.mostItemsPerBox}
+                    </Title>
+                  </Paper>
+                  <Paper shadow="sm" p="sm" w={"200px"} m={"auto"}>
+                    <Title order={4}>Space used</Title>
+                    <Title order={1} ta={"center"}>
+                      <ThemeIcon variant="white" size={"xl"}>
+                        <IconPercentage70 />
+                      </ThemeIcon>
+                      {packedStats.spaceUsed}
+                      {" %"}
+                    </Title>
+                  </Paper>
+                </SimpleGrid>
               )}
 
               {packedBoxes.map((pb, pbIdx) => (
