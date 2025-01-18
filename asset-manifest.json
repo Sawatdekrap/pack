@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/pack/static/css/main.a6fba2d5.css",
+    "main.js": "/pack/static/js/main.eaa47a93.js",
+    "static/js/453.ff6d8d46.chunk.js": "/pack/static/js/453.ff6d8d46.chunk.js",
+    "static/media/boxPackerLogo.svg": "/pack/static/media/boxPackerLogo.ea990b66b5621ece87c1fd7ec4696148.svg",
+    "index.html": "/pack/index.html",
+    "main.a6fba2d5.css.map": "/pack/static/css/main.a6fba2d5.css.map",
+    "main.eaa47a93.js.map": "/pack/static/js/main.eaa47a93.js.map",
+    "453.ff6d8d46.chunk.js.map": "/pack/static/js/453.ff6d8d46.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a6fba2d5.css",
+    "static/js/main.eaa47a93.js"
+  ]
+}
