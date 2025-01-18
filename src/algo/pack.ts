@@ -99,7 +99,11 @@ export const pack = (
     })
   );
 
-  return packedBoxes;
+  const reducedPackedBoxes = packedBoxes.map((pb) =>
+    reduceFinalFit(pb, sortedBoxes)
+  );
+
+  return reducedPackedBoxes;
 };
 
 const nextBoxToUse = (
@@ -250,4 +254,20 @@ const updateCongruencyGroup = (
   }
 
   congruencyGroup.itemGroups = remainingItemGroups;
+};
+
+const reduceFinalFit = (
+  packedBox: PackedBoxItf,
+  sortedBoxes: BoxItf[]
+): PackedBoxItf => {
+  const boundingDimensions = _pi.getBoundingDims(packedBox.packedItems);
+  const finalBox = sortedBoxes.find((b) => {
+    return _d.fitsStrictly(b.dimensions, boundingDimensions);
+  });
+  if (finalBox === undefined) return packedBox;
+
+  return {
+    ...packedBox,
+    box: finalBox,
+  };
 };
