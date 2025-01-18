@@ -219,6 +219,12 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
                 Papaparse (CSVs)
               </Anchor>
             </li>
+            <li>
+              Hosting:{" "}
+              <Anchor href="https://github.com/gitname/react-gh-pages">
+                React Github Pages
+              </Anchor>
+            </li>
           </ul>
         </Text>
 
