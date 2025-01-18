@@ -255,6 +255,11 @@ const InfoModal = ({ opened, onClose }: InfoModalProps) => {
               </Anchor>
             </li>
             <li>
+              <Anchor href="https://www.researchgate.net/publication/226249396_A_New_Heuristic_Algorithm_for_the_3D_Bin_Packing_Problem">
+                (Paper) A New Heuristic Algorithm for the 3D Bin Packing Problem
+              </Anchor>
+            </li>
+            <li>
               <Anchor href="https://www.python-mip.com/">Python MIP</Anchor>
             </li>
           </ul>
