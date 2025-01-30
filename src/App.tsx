@@ -4,8 +4,6 @@ import {
   Button,
   ColorSwatch,
   Container,
-  Grid,
-  GridCol,
   Group,
   Image,
   Paper,
@@ -51,20 +49,25 @@ const PackedBox = ({ packedBox }: PackedBoxProps) => {
   }));
 
   return (
-    <Paper mt={"md"} shadow="sm">
-      <Stack>
-        <PackedBoxPreview size="sm" />
-        <PackedBoxModal />
-        <CustomTable
-          columns={[
-            { key: "color", title: "", width: "43px" },
-            { key: "name", title: "Name" },
-            { key: "quantity", title: "Qty", width: "70px" },
-          ]}
-          data={tableData}
-        />
-      </Stack>
-    </Paper>
+    <Stack gap={"xs"} mt={"md"}>
+      <Title order={2} flex={"auto"}>
+        {packedBox.box.name}
+      </Title>
+      <Paper shadow="sm">
+        <Stack>
+          <PackedBoxPreview size="sm" />
+          <PackedBoxModal />
+          <CustomTable
+            columns={[
+              { key: "color", title: "", width: "43px" },
+              { key: "name", title: "Name" },
+              { key: "quantity", title: "Qty", width: "70px" },
+            ]}
+            data={tableData}
+          />
+        </Stack>
+      </Paper>
+    </Stack>
   );
 };
 
@@ -137,6 +140,7 @@ const App = () => {
                   type="container"
                   cols={{ base: 1, "700px": 3 }}
                   spacing={{ base: 10, "300px": "xl" }}
+                  mt={"md"}
                 >
                   <Paper shadow="sm" p="sm" w={"200px"} m={"auto"}>
                     <Title order={4}>Boxes used</Title>
