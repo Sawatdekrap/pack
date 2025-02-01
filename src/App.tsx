@@ -44,7 +44,7 @@ const App = () => {
   const [packedStats, setPackedStats] = useState<PackedStats | undefined>();
   const [infoOpen, setInfoOpen] = useState(false);
 
-  const mobile = useMediaQuery("(max-width: 375px)");
+  const mobile = useMediaQuery("(max-width: 425px)");
 
   const onPack = () => {
     if (boxes.length === 0 || itemGroups.length === 0) return;

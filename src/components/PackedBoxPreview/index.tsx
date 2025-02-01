@@ -77,7 +77,7 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
             const position = offsetDimensionsInBox(
               [packedItem.offset.x, packedItem.offset.z, packedItem.offset.y],
               itemDims,
-              [boxDims.length, boxDims.depth, boxDims.width],
+              [boxDims.length, boxDims.depth, boxDims.width]
             );
             const segments = [
               packedItem.pattern.long,
@@ -162,7 +162,7 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
           </ActionIcon>
         </Group>
       </Group>
-      <Flex direction="column" h="100%">
+      <Flex direction="column">
         <Canvas
           style={{
             flex: size === "sm" ? "250px" : size === "md" ? "450px" : "80vh",
