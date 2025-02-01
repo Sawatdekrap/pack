@@ -2,7 +2,7 @@ import { CongruencyGroupItf, ItemGroupItf } from "../../interfaces";
 import { orientationToBeSame } from "./dimensions";
 
 export const gatherCongruencyGroups = (
-  itemGroups: ItemGroupItf[]
+  itemGroups: ItemGroupItf[],
 ): CongruencyGroupItf[] => {
   const congruencyGroups: CongruencyGroupItf[] = [];
   itemGroups.forEach((ig) => {

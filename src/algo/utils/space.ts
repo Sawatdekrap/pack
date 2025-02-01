@@ -13,7 +13,7 @@ export const spaceFromBox = (box: BoxItf, boxIdx: number): SpaceItf => ({
 // NOTE this can be expanded and/or simplified
 export const potentialNegativeSpacesFromPackedItems = (
   packedItems: PackedItemsItf,
-  space: SpaceItf
+  space: SpaceItf,
 ): SpaceItf[][] => [
   [
     {

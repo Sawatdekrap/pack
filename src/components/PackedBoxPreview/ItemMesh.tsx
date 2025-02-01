@@ -27,7 +27,7 @@ const ItemMesh = ({
 
   const colors = itemGroups.reduce((acc, ig) => {
     return acc.concat(
-      ...Array(ig.quantity).fill(colorFromString(ig.item.name))
+      ...Array(ig.quantity).fill(colorFromString(ig.item.name)),
     );
   }, []);
 
@@ -52,7 +52,7 @@ const ItemMesh = ({
             <boxGeometry args={subItemDimensions} />
             <meshStandardMaterial color={color} />
             <Edges lineWidth={1} color={"black"} />
-          </mesh>
+          </mesh>,
         );
       }
     }

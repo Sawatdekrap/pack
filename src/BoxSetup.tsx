@@ -106,7 +106,7 @@ const BoxSetup = () => {
           depth: r.depth,
         },
         enabled: true,
-      }))
+      })),
     );
   };
 

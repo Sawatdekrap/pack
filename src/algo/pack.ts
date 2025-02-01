@@ -21,20 +21,20 @@ const compDims = (dimsA: DimensionsItf, dimsB: DimensionsItf): number => {
 export const pack = (
   boxes: BoxItf[],
   itemGroups: ItemGroupItf[],
-  emptySpaceRatio: number
+  emptySpaceRatio: number,
 ) => {
   const sortedCongruencyGroups = _cg
     .gatherCongruencyGroups(itemGroups)
     .sort((a, b) => -compDims(a.dimensions, b.dimensions));
 
   const sortedBoxes = [...boxes].sort(
-    (a, b) => _d.volume(a.dimensions) - _d.volume(b.dimensions)
+    (a, b) => _d.volume(a.dimensions) - _d.volume(b.dimensions),
   );
 
   const usableSpaces: SpaceItf[] = [];
 
   const smallestItemVolume = _d.volume(
-    sortedCongruencyGroups[sortedCongruencyGroups.length - 1].dimensions
+    sortedCongruencyGroups[sortedCongruencyGroups.length - 1].dimensions,
   );
 
   const allPackedItems: PackedItemsItf[] = [];
@@ -46,7 +46,7 @@ export const pack = (
 
       // Select space from used boxes
       const spaceToUseIdx = usableSpaces.findIndex(
-        (us) => _d.fitOrientations(us.dimensions, cg.dimensions).length > 0
+        (us) => _d.fitOrientations(us.dimensions, cg.dimensions).length > 0,
       );
       if (spaceToUseIdx !== -1) {
         spaceToUse = usableSpaces.splice(spaceToUseIdx, 1)[0];
@@ -59,7 +59,7 @@ export const pack = (
           sortedBoxes,
           cg,
           sortedCongruencyGroups.slice(cgIdx, cgIdx + 1),
-          emptySpaceRatio
+          emptySpaceRatio,
         );
         usedBoxes.push(boxToUse);
         spaceToUse = _s.spaceFromBox(boxToUse, usedBoxes.length - 1);
@@ -68,7 +68,7 @@ export const pack = (
       const potentialPackedItems = getPotentialPackedItems(cg, spaceToUse);
       const [packedItems, newSpaces] = selectPackedItemsAndNegativeSpace(
         potentialPackedItems,
-        spaceToUse
+        spaceToUse,
       );
 
       allPackedItems.push(packedItems);
@@ -78,7 +78,7 @@ export const pack = (
         .filter((s) => _d.volume(s.dimensions) >= smallestItemVolume)
         .forEach((s) => usableSpaces.push(s));
       usableSpaces.sort(
-        (a, b) => _d.volume(a.dimensions) - _d.volume(b.dimensions)
+        (a, b) => _d.volume(a.dimensions) - _d.volume(b.dimensions),
       );
     }
   });
@@ -97,11 +97,11 @@ export const pack = (
       } else {
         return pba.offset.x - pbb.offset.x;
       }
-    })
+    }),
   );
 
   const reducedPackedBoxes = packedBoxes.map((pb) =>
-    reduceFinalFit(pb, sortedBoxes)
+    reduceFinalFit(pb, sortedBoxes),
   );
 
   return reducedPackedBoxes;
@@ -111,13 +111,13 @@ const nextBoxToUse = (
   sortedBoxes: BoxItf[],
   congruencyGroup: CongruencyGroupItf,
   remainingCongruencyGroups: CongruencyGroupItf[],
-  emptySpaceRatio: number
+  emptySpaceRatio: number,
 ): BoxItf => {
   const remainingVolume =
     emptySpaceRatio *
       remainingCongruencyGroups.reduce(
         (t, cg) => (t += _d.volume(cg.dimensions) * _cg.quantity(cg)),
-        0
+        0,
       ) +
     _d.volume(congruencyGroup.dimensions) * _cg.quantity(congruencyGroup);
 
@@ -128,19 +128,19 @@ const nextBoxToUse = (
     sortedBoxes.find(
       (b) =>
         _d.volume(b.dimensions) >= remainingVolume &&
-        _d.fitOrientations(b.dimensions, congruencyGroup.dimensions)
+        _d.fitOrientations(b.dimensions, congruencyGroup.dimensions),
     ) || sortedBoxes[sortedBoxes.length - 1]
   );
 };
 
 const getPotentialPackedItems = (
   congruencyGroup: CongruencyGroupItf,
-  space: SpaceItf
+  space: SpaceItf,
 ): PackedItemsItf[] => {
   const potentialPackedItems: PackedItemsItf[] = [];
   for (const o of _d.fitOrientations(
     space.dimensions,
-    congruencyGroup.dimensions
+    congruencyGroup.dimensions,
   )) {
     const rotatedDims = _d.rotate(congruencyGroup.dimensions, o);
     // TODO can do packable dimensions in all orderings of axes to get better packing
@@ -149,17 +149,17 @@ const getPotentialPackedItems = (
     // TODO should this instead first pack in the most-available dimensions? Comes with some assumptions
     const packableLengths = Math.min(
       Math.floor(space.dimensions.length / rotatedDims.length),
-      _cg.quantity(congruencyGroup)
+      _cg.quantity(congruencyGroup),
     );
     const packableWidths = Math.min(
       Math.floor(space.dimensions.width / rotatedDims.width),
-      Math.floor(_cg.quantity(congruencyGroup) / packableLengths)
+      Math.floor(_cg.quantity(congruencyGroup) / packableLengths),
     );
     const packableDepths = Math.min(
       Math.floor(space.dimensions.depth / rotatedDims.depth),
       Math.floor(
-        _cg.quantity(congruencyGroup) / (packableLengths * packableWidths)
-      )
+        _cg.quantity(congruencyGroup) / (packableLengths * packableWidths),
+      ),
     );
     const packableQuantity = packableLengths * packableWidths * packableDepths;
 
@@ -194,14 +194,14 @@ const getPotentialPackedItems = (
   }
 
   const maxQuantity = Math.max(
-    ...potentialPackedItems.map((pi) => _pi.quantity(pi))
+    ...potentialPackedItems.map((pi) => _pi.quantity(pi)),
   );
   return potentialPackedItems.filter((pi) => _pi.quantity(pi) === maxQuantity);
 };
 
 const selectPackedItemsAndNegativeSpace = (
   potentialPackedItems: PackedItemsItf[],
-  space: SpaceItf
+  space: SpaceItf,
 ): [PackedItemsItf, SpaceItf[]] => {
   let bestPackedItems: PackedItemsItf | null = null;
   let bestNegativeSpaceGroup: SpaceItf[] | null = null;
@@ -209,11 +209,11 @@ const selectPackedItemsAndNegativeSpace = (
   for (const packedItems of potentialPackedItems) {
     const negativeSpaceGroups = _s.potentialNegativeSpacesFromPackedItems(
       packedItems,
-      space
+      space,
     );
 
     const largestGroup = negativeSpaceGroups.sort(
-      (a, b) => -compDims(a[0].dimensions, b[0].dimensions)
+      (a, b) => -compDims(a[0].dimensions, b[0].dimensions),
     )[0];
     const largestGroupVolume = _d.volume(largestGroup[0].dimensions);
     if (largestGroupVolume > bestNegativeSpaceVolume) {
@@ -231,7 +231,7 @@ const selectPackedItemsAndNegativeSpace = (
 
 const updateCongruencyGroup = (
   congruencyGroup: CongruencyGroupItf,
-  packedItems: PackedItemsItf
+  packedItems: PackedItemsItf,
 ) => {
   let packedQuantity = 0;
   const remainingItemGroups: ItemGroupItf[] = [];
@@ -259,7 +259,7 @@ const updateCongruencyGroup = (
 
 const reduceFinalFit = (
   packedBox: PackedBoxItf,
-  sortedBoxes: BoxItf[]
+  sortedBoxes: BoxItf[],
 ): PackedBoxItf => {
   const boundingDimensions = _pi.getBoundingDims(packedBox.packedItems);
   const finalBox = sortedBoxes.find((b) => {
@@ -269,7 +269,7 @@ const reduceFinalFit = (
 
   const rotateOrientation = _d.fitOrientations(
     finalBox.dimensions,
-    boundingDimensions
+    boundingDimensions,
   )[0];
   const rotatedPackedItems = packedBox.packedItems.map((pi) => ({
     ...pi,

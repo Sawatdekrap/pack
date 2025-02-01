@@ -1,4 +1,5 @@
 # What is this?
+
 This is an app that takes a collection of items and tries to pack them "optimally" into boxes, and show you how.
 
 Originally this was a script for a talk at work about box packing problems and different solutions and the optimality of their results. You can see the original Python script I used in `assets/pack.py`, and you can see my MIP (Mixed Integer Programming) implementation in `assets/mip.py` (Which can be extended to multi-box)
@@ -20,9 +21,10 @@ Ultimately, this sort of thing tends to not be used very extensively for a few r
 You can look at the source files for this project to see what's happening (although I think the Python files linked above are much easier to read).
 
 At a high-level this is the flow:
+
 - Sort boxes by descending "unweildy-ness"
   - This is super vague because there's a few things you can sort by
-  - I ended up using the measure l^2 * h^2 * d^2
+  - I ended up using the measure l^2 \* h^2 \* d^2
   - This dealt nicely-enough with both large volumes and single large dimensions
 - Group items into "concurrency groups" (items with the same dimensions with rotation)
   - For super complex packing that leaves lots of empty space around, this can be helped a little by allowing items slightly smaller to be grouped
@@ -54,6 +56,7 @@ Definitely not - but it does a decent enough job that most of the time the most-
 ## I found a bug/my page broke
 
 I spent very little time accouting for edge cases or ways to break the site, but congratulations! Here's a list of some bugs you may experience:
+
 - Too many packed boxes fail to render the preview (although lots of items should be ok!)
 - 3D preview glitches
 - CSV import fails
@@ -77,6 +80,7 @@ Maybe
 Definitely. There's lots of open source libraries as well as commercial solutions that do similar things. You can find them just by typing "box packing API" in Google.
 
 Here's a few I've seen, some more interesting than others:
+
 - [3d bin container packing](https://github.com/skjolber/3d-bin-container-packing)
 - [boxpacker.io](https://boxpacker.io/en/stable/)
 - [Interactive 3D visualisation](https://xserver2-dashboard.cloud.ptvgroup.com/dashboard/Content/Showcases/LoadingOptimization/InteractiveVisualization/index.htm)
@@ -88,11 +92,13 @@ Note I don't vouch for any of these, I"m just saving you a google search.
 ## References
 
 There were a few related resources I used to get me up to speed for my work talk
+
 - [(Paper) A MIP Approach for some Practical Packing Problems: Balancing Constraints and Tetris-like Items](https://www.researchgate.net/publication/220340260_A_MIP_approach_for_some_practical_packing_problems_Balancing_constraints_and_tetris-like_items)
 - [(Paper) A New Heuristic Algorithm for the 3D Bin Packing Problem](https://www.researchgate.net/publication/226249396_A_New_Heuristic_Algorithm_for_the_3D_Bin_Packing_Problem)
 - [Python MIP](https://www.python-mip.com/)
 
 # Todo eventually... maybe
+
 - [ ] Highligh list items being packed on step
 - [ ] CSV export / local save
 - [ ] Show packed items list in fullscreen view

@@ -77,7 +77,7 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
             const position = offsetDimensionsInBox(
               [packedItem.offset.x, packedItem.offset.z, packedItem.offset.y],
               itemDims,
-              [boxDims.length, boxDims.depth, boxDims.width]
+              [boxDims.length, boxDims.depth, boxDims.width],
             );
             const segments = [
               packedItem.pattern.long,

@@ -58,8 +58,6 @@ const App = () => {
     setPreviewActiveIdx(0);
   };
 
-  console.log(previewActiveIdx);
-
   return (
     <AppShell header={{ height: 60 }} mih={"100vh"} padding={"md"}>
       <AppShell.Header>

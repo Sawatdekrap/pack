@@ -5,7 +5,7 @@ export const volume = (dimensions: DimensionsItf): number =>
 
 export const rotate = (
   dims: DimensionsItf,
-  orientation: Orientation
+  orientation: Orientation,
 ): DimensionsItf => {
   switch (orientation) {
     case Orientation.FRONT:
@@ -49,7 +49,7 @@ export const rotate = (
 
 export const orientationToBeSame = (
   dimensionsA: DimensionsItf,
-  dimensionsB: DimensionsItf
+  dimensionsB: DimensionsItf,
 ): Orientation | null => {
   if (volume(dimensionsA) !== volume(dimensionsB)) return null;
 
@@ -60,7 +60,7 @@ export const orientationToBeSame = (
 
 export const fitsStrictly = (
   dimensionsA: DimensionsItf,
-  dimensionsB: DimensionsItf
+  dimensionsB: DimensionsItf,
 ) =>
   dimensionsA.length >= dimensionsB.length &&
   dimensionsA.width >= dimensionsB.width &&
@@ -68,11 +68,11 @@ export const fitsStrictly = (
 
 export const fitOrientations = (
   dimensionsA: DimensionsItf,
-  dimensionsB: DimensionsItf
+  dimensionsB: DimensionsItf,
 ): Orientation[] => {
   if (volume(dimensionsA) < volume(dimensionsB)) return [];
 
   return ORIENTATIONS.filter((o) =>
-    fitsStrictly(dimensionsA, rotate(dimensionsB, o))
+    fitsStrictly(dimensionsA, rotate(dimensionsB, o)),
   );
 };

@@ -15,7 +15,7 @@ interface PackedBoxContextItf {
 }
 
 const PackedBoxContext = createContext<PackedBoxContextItf | undefined>(
-  undefined
+  undefined,
 );
 
 interface PackedBoxProviderProps {
@@ -26,7 +26,7 @@ interface PackedBoxProviderProps {
 }
 
 const reducePackedItemstoGroups = (
-  packedItems: PackedItemsItf[]
+  packedItems: PackedItemsItf[],
 ): Record<string, ItemGroupItf> => {
   return packedItems.reduce<Record<string, ItemGroupItf>>((records, pi) => {
     pi.itemGroups.forEach((ig) => {

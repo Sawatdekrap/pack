@@ -110,7 +110,7 @@ const ItemSetup = () => {
           },
         },
         quantity: r.quantity === undefined ? 1 : r.quantity,
-      }))
+      })),
     );
   };
 

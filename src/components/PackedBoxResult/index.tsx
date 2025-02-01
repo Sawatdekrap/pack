@@ -19,7 +19,7 @@ const PackedBoxResult = ({ packedBox }: PackedBoxProps) => {
   const tableData = useMemo(() => {
     const newTableData = currentItemGroups.map((ig) => {
       const matchingIg = stepItemGroups.find(
-        (sig) => ig.item.name === sig.item.name
+        (sig) => ig.item.name === sig.item.name,
       );
       const fw = matchingIg ? "bold" : "normal";
       const qtyLabel = matchingIg

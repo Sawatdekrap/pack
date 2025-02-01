@@ -2,7 +2,7 @@ import { Orientation } from "../../interfaces";
 
 export const rotatedDimensions = (
   dimensions: [number, number, number],
-  orientation: Orientation
+  orientation: Orientation,
 ): [number, number, number] => {
   switch (orientation) {
     case Orientation.FRONT:
@@ -25,7 +25,7 @@ export const rotatedDimensions = (
 export const offsetDimensionsInBox = (
   position: [number, number, number],
   dimensions: [number, number, number],
-  boxDimensions: [number, number, number]
+  boxDimensions: [number, number, number],
 ): [number, number, number] => {
   return [
     position[0] + dimensions[0] / 2 - boxDimensions[0] / 2,
