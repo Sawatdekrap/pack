@@ -18,7 +18,7 @@ import {
   IconPackages,
   IconPercentage70,
 } from "@tabler/icons-react";
-import { useMediaQuery } from "@mantine/hooks";
+import { useMediaQuery, useScrollIntoView } from "@mantine/hooks";
 import { useAtom } from "jotai";
 import {
   boxesAtom,
@@ -45,6 +45,7 @@ const App = () => {
   const [infoOpen, setInfoOpen] = useState(false);
 
   const mobile = useMediaQuery("(max-width: 425px)");
+  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLButtonElement>();
 
   const onPack = () => {
     if (boxes.length === 0 || itemGroups.length === 0) return;
@@ -56,6 +57,7 @@ const App = () => {
     setPackedBoxes(packedBoxes);
     setPackedStats(getStats(packedBoxes));
     setPreviewActiveIdx(0);
+    targetRef.current && scrollIntoView({ alignment: "start" });
   };
 
   return (
@@ -96,6 +98,7 @@ const App = () => {
               gradient={{ from: "blue", to: "teal", deg: 165 }}
               onClick={onPack}
               mt={"md"}
+              ref={targetRef}
             >
               Pack
             </Button>
