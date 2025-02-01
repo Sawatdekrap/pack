@@ -118,7 +118,7 @@ const ItemSetup = () => {
     name: (
       <Box>
         <Text>{i.item.name}</Text>
-        <Text size={"0.5rem"} c="dimmed">
+        <Text size={"0.5rem"} c="dimmed" hiddenFrom="sm">
           {i.item.dimensions.length} x {i.item.dimensions.width} x{" "}
           {i.item.dimensions.depth}
         </Text>

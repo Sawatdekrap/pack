@@ -41,6 +41,8 @@ interface PackedBoxProps {
 }
 
 const PackedBox = ({ packedBox }: PackedBoxProps) => {
+  const mobile = useMediaQuery("(max-width: 375px)");
+
   const { currentItemGroups } = usePackedBox();
   const tableData = currentItemGroups.map((ig) => ({
     color: <ColorSwatch color={colorFromString(ig.item.name)} />,
@@ -55,7 +57,7 @@ const PackedBox = ({ packedBox }: PackedBoxProps) => {
       </Title>
       <Paper shadow="sm">
         <Stack>
-          <PackedBoxPreview size="sm" />
+          <PackedBoxPreview size={mobile ? "sm" : "md"} />
           <PackedBoxModal />
           <CustomTable
             columns={[

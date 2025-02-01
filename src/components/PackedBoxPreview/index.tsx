@@ -6,7 +6,7 @@ import ItemMesh from "./ItemMesh";
 import { offsetDimensionsInBox } from "./helpers";
 import { Canvas } from "@react-three/fiber";
 import PreviewItemMesh from "./PreviewItemMesh";
-import { ActionIcon, Box, Group, Slider } from "@mantine/core";
+import { ActionIcon, Box, Flex, Group, Slider } from "@mantine/core";
 import {
   IconCameraRotate,
   IconCaretLeft,
@@ -16,7 +16,7 @@ import {
 } from "@tabler/icons-react";
 
 interface PackedBoxPreviewProps {
-  size: "sm" | "lg";
+  size: "sm" | "md" | "lg";
 }
 
 const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
@@ -106,8 +106,8 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
   }, [packedBox, step]);
 
   return (
-    <Box h={size === "lg" ? "90vh" : undefined}>
-      <Group pos="relative" w="100%" display="flex" justify="flex-end">
+    <Flex h={size === "lg" ? "100%" : undefined} direction="column">
+      <Group pos="relative" w="100%" display="flex" justify="flex-end" flex={0}>
         <Group pos="absolute" top="0.5rem" right="0.5rem">
           <ActionIcon
             variant="transparent"
@@ -125,38 +125,42 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
           </ActionIcon>
         </Group>
       </Group>
-      <Canvas
-        style={{ height: size === "sm" ? "450px" : "85vh" }}
-        shadows
-        onCreated={resetCamera}
-      >
-        <CameraControls ref={cameraRef} />
-        {renderedDisplay}
-      </Canvas>
-      <Group display={"flex"} gap={"xs"} px={"xs"}>
-        <ActionIcon
-          onClick={() => setStep(step - 1)}
-          variant="transparent"
-          disabled={step === 0}
+      <Flex direction="column" h="100%">
+        <Canvas
+          style={{
+            flex: size === "sm" ? "250px" : size === "md" ? "450px" : "80vh",
+          }}
+          shadows
+          onCreated={resetCamera}
         >
-          <IconCaretLeft />
-        </ActionIcon>
-        <Slider
-          flex={"auto"}
-          min={0}
-          max={totalSteps}
-          value={step}
-          onChange={setStep}
-        />
-        <ActionIcon
-          onClick={() => setStep(step + 1)}
-          variant="transparent"
-          disabled={step === totalSteps}
-        >
-          <IconCaretRight />
-        </ActionIcon>
-      </Group>
-    </Box>
+          <CameraControls ref={cameraRef} />
+          {renderedDisplay}
+        </Canvas>
+        <Group display={"flex"} gap={"xs"} px={"xs"} flex={1}>
+          <ActionIcon
+            onClick={() => setStep(step - 1)}
+            variant="transparent"
+            disabled={step === 0}
+          >
+            <IconCaretLeft />
+          </ActionIcon>
+          <Slider
+            flex={"auto"}
+            min={0}
+            max={totalSteps}
+            value={step}
+            onChange={setStep}
+          />
+          <ActionIcon
+            onClick={() => setStep(step + 1)}
+            variant="transparent"
+            disabled={step === totalSteps}
+          >
+            <IconCaretRight />
+          </ActionIcon>
+        </Group>
+      </Flex>
+    </Flex>
   );
 };
 
