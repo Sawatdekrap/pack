@@ -20,7 +20,12 @@ import {
 } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
 import { useAtom } from "jotai";
-import { boxesAtom, itemGroupsAtom, packedBoxesAtom } from "./atoms";
+import {
+  boxesAtom,
+  itemGroupsAtom,
+  packedBoxesAtom,
+  previewActiveIdxAtom,
+} from "./atoms";
 import { pack } from "./algo/pack";
 import { PackedStats } from "./interfaces";
 import { PackedBoxProvider } from "./contexts/PackedBoxContext";
@@ -35,6 +40,7 @@ const App = () => {
   const [boxes] = useAtom(boxesAtom);
   const [itemGroups] = useAtom(itemGroupsAtom);
   const [packedBoxes, setPackedBoxes] = useAtom(packedBoxesAtom);
+  const [previewActiveIdx, setPreviewActiveIdx] = useAtom(previewActiveIdxAtom);
   const [packedStats, setPackedStats] = useState<PackedStats | undefined>();
   const [infoOpen, setInfoOpen] = useState(false);
 
@@ -49,7 +55,10 @@ const App = () => {
     );
     setPackedBoxes(packedBoxes);
     setPackedStats(getStats(packedBoxes));
+    setPreviewActiveIdx(0);
   };
+
+  console.log(previewActiveIdx);
 
   return (
     <AppShell header={{ height: 60 }} mih={"100vh"} padding={"md"}>
@@ -134,7 +143,12 @@ const App = () => {
               )}
 
               {packedBoxes.map((pb, pbIdx) => (
-                <PackedBoxProvider key={pbIdx} packedBox={pb}>
+                <PackedBoxProvider
+                  key={pbIdx}
+                  packedBox={pb}
+                  previewActive={previewActiveIdx === pbIdx}
+                  activatePreview={() => setPreviewActiveIdx(pbIdx)}
+                >
                   <PackedBoxResult packedBox={pb} />
                 </PackedBoxProvider>
               ))}

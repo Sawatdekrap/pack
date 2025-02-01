@@ -7,3 +7,5 @@ export const boxesAtom = atom<BoxItf[]>(INITIAL_BOXES);
 export const itemGroupsAtom = atom<ItemGroupItf[]>(INITIAL_ITEM_GROUPS);
 
 export const packedBoxesAtom = atom<PackedBoxItf[]>([]);
+
+export const previewActiveIdxAtom = atom<number>(0);

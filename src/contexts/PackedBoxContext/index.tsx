@@ -10,6 +10,8 @@ interface PackedBoxContextItf {
   stepItemGroups: ItemGroupItf[];
   fullscreen: boolean;
   setFullscreen: (val: boolean) => void;
+  activatePreview: () => void;
+  previewActive: boolean;
 }
 
 const PackedBoxContext = createContext<PackedBoxContextItf | undefined>(
@@ -18,6 +20,8 @@ const PackedBoxContext = createContext<PackedBoxContextItf | undefined>(
 
 interface PackedBoxProviderProps {
   packedBox: PackedBoxItf;
+  activatePreview: () => void;
+  previewActive: boolean;
   children: React.ReactNode;
 }
 
@@ -36,7 +40,12 @@ const reducePackedItemstoGroups = (
   }, {});
 };
 
-const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
+const PackedBoxProvider = ({
+  packedBox,
+  activatePreview,
+  previewActive,
+  children,
+}: PackedBoxProviderProps) => {
   const totalSteps = packedBox.packedItems.length + 1;
   const [step, setStepActual] = useState(totalSteps);
   const [fullscreen, setFullscreen] = useState(false);
@@ -67,6 +76,8 @@ const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
         stepItemGroups,
         fullscreen,
         setFullscreen,
+        activatePreview,
+        previewActive,
       }}
     >
       {children}

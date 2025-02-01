@@ -6,11 +6,22 @@ import ItemMesh from "./ItemMesh";
 import { offsetDimensionsInBox } from "./helpers";
 import { Canvas } from "@react-three/fiber";
 import PreviewItemMesh from "./PreviewItemMesh";
-import { ActionIcon, Box, Flex, Group, Slider } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Flex,
+  Group,
+  Slider,
+  Stack,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import {
   IconCameraRotate,
   IconCaretLeft,
   IconCaretRight,
+  IconEye,
   IconMaximize,
   IconMinimize,
 } from "@tabler/icons-react";
@@ -20,8 +31,16 @@ interface PackedBoxPreviewProps {
 }
 
 const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
-  const { packedBox, step, setStep, totalSteps, fullscreen, setFullscreen } =
-    usePackedBox();
+  const {
+    packedBox,
+    step,
+    setStep,
+    totalSteps,
+    fullscreen,
+    setFullscreen,
+    activatePreview,
+    previewActive,
+  } = usePackedBox();
 
   const cameraRef = useRef<CameraControls>(null);
 
@@ -33,6 +52,8 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
     const boxDims = packedBox.box.dimensions;
     const scale =
       (1 / Math.max(1, boxDims.length, boxDims.width, boxDims.depth)) * 2;
+
+    if (!previewActive) return <></>;
 
     return (
       <>
@@ -103,7 +124,25 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
         />
       </>
     );
-  }, [packedBox, step]);
+  }, [packedBox, step, previewActive]);
+
+  if (!previewActive) {
+    return (
+      <Button
+        h={size === "sm" ? "250px" : "450px"}
+        variant="subtle"
+        onClick={activatePreview}
+        size="xl"
+      >
+        <Stack ta="center" gap={0}>
+          <Text>
+            <IconEye />
+          </Text>
+          <Text fw="bold">Click to Activate Preview</Text>
+        </Stack>
+      </Button>
+    );
+  }
 
   return (
     <Flex h={size === "lg" ? "100%" : undefined} direction="column">
