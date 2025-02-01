@@ -8,14 +8,12 @@ import { Canvas } from "@react-three/fiber";
 import PreviewItemMesh from "./PreviewItemMesh";
 import {
   ActionIcon,
-  Box,
   Button,
   Flex,
   Group,
   Slider,
   Stack,
   Text,
-  UnstyledButton,
 } from "@mantine/core";
 import {
   IconCameraRotate,
