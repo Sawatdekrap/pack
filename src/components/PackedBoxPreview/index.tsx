@@ -142,6 +142,10 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
     );
   }
 
+  // Gobbildy-goop, maybe this will help mobile canvas heights
+  const canvasContainerHeight =
+    size === "sm" ? "250px" : size === "md" ? "450px" : "80vh";
+
   return (
     <Flex h={size === "lg" ? "100%" : undefined} direction="column">
       <Group pos="relative" w="100%" display="flex" justify="flex-end" flex={0}>
@@ -163,16 +167,16 @@ const PackedBoxPreview = ({ size = "sm" }: PackedBoxPreviewProps) => {
         </Group>
       </Group>
       <Flex direction="column">
-        <Canvas
-          style={{
-            flex: size === "sm" ? "250px" : size === "md" ? "450px" : "80vh",
-          }}
-          shadows
-          onCreated={resetCamera}
+        <Flex
+          flex={`0 0 ${canvasContainerHeight}`}
+          mah={canvasContainerHeight}
+          mih={canvasContainerHeight}
         >
-          <CameraControls ref={cameraRef} />
-          {renderedDisplay}
-        </Canvas>
+          <Canvas shadows onCreated={resetCamera}>
+            <CameraControls ref={cameraRef} />
+            {renderedDisplay}
+          </Canvas>
+        </Flex>
         <Group display={"flex"} gap={"xs"} px={"xs"} flex={1}>
           <ActionIcon
             onClick={() => setStep(step - 1)}
