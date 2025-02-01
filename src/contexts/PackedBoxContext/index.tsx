@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { ItemGroupItf, PackedBoxItf } from "../../interfaces";
+import { ItemGroupItf, PackedBoxItf, PackedItemsItf } from "../../interfaces";
 
 interface PackedBoxContextItf {
   packedBox: PackedBoxItf;
@@ -7,6 +7,7 @@ interface PackedBoxContextItf {
   setStep: (v: number) => void;
   totalSteps: number;
   currentItemGroups: ItemGroupItf[];
+  stepItemGroups: ItemGroupItf[];
   fullscreen: boolean;
   setFullscreen: (val: boolean) => void;
 }
@@ -20,6 +21,21 @@ interface PackedBoxProviderProps {
   children: React.ReactNode;
 }
 
+const reducePackedItemstoGroups = (
+  packedItems: PackedItemsItf[]
+): Record<string, ItemGroupItf> => {
+  return packedItems.reduce<Record<string, ItemGroupItf>>((records, pi) => {
+    pi.itemGroups.forEach((ig) => {
+      if (ig.item.name in records) {
+        records[ig.item.name].quantity += ig.quantity;
+      } else {
+        records[ig.item.name] = { ...ig };
+      }
+    });
+    return records;
+  }, {});
+};
+
 const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
   const totalSteps = packedBox.packedItems.length + 1;
   const [step, setStepActual] = useState(totalSteps);
@@ -30,21 +46,15 @@ const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
     setStepActual(value);
   };
 
-  const stepPackedItems = packedBox.packedItems.slice(0, step || undefined);
-  const itemGroupRecords = stepPackedItems.reduce<Record<string, ItemGroupItf>>(
-    (records, pi) => {
-      pi.itemGroups.forEach((ig) => {
-        if (ig.item.name in records) {
-          records[ig.item.name].quantity += ig.quantity;
-        } else {
-          records[ig.item.name] = { ...ig };
-        }
-      });
-      return records;
-    },
-    {}
-  );
-  const currentItemGroups = Object.values(itemGroupRecords);
+  const currentPackedItems = packedBox.packedItems.slice(0, step || undefined);
+  const currentGroupRecords = reducePackedItemstoGroups(currentPackedItems);
+  const currentItemGroups = Object.values(currentGroupRecords);
+  const stepPackedItems =
+    step === 0 || step === totalSteps
+      ? []
+      : packedBox.packedItems.slice(step - 1, step);
+  const stepGroupRecords = reducePackedItemstoGroups(stepPackedItems);
+  const stepItemGroups = Object.values(stepGroupRecords);
 
   return (
     <PackedBoxContext.Provider
@@ -54,6 +64,7 @@ const PackedBoxProvider = ({ packedBox, children }: PackedBoxProviderProps) => {
         totalSteps,
         setStep,
         currentItemGroups,
+        stepItemGroups,
         fullscreen,
         setFullscreen,
       }}

@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import {
   AppShell,
   Button,
-  ColorSwatch,
   Container,
   Group,
   Image,
   Paper,
   SimpleGrid,
   Space,
-  Stack,
   ThemeIcon,
   Title,
 } from "@mantine/core";
@@ -21,57 +19,17 @@ import {
   IconPercentage70,
 } from "@tabler/icons-react";
 import { useMediaQuery } from "@mantine/hooks";
-import CustomTable from "./components/CustomTable";
 import { useAtom } from "jotai";
 import { boxesAtom, itemGroupsAtom, packedBoxesAtom } from "./atoms";
 import { pack } from "./algo/pack";
-import { PackedBoxItf, PackedStats } from "./interfaces";
-import { PackedBoxProvider, usePackedBox } from "./contexts/PackedBoxContext";
-import PackedBoxPreview from "./components/PackedBoxPreview";
-import { colorFromString } from "./components/PackedBoxPreview/helpers";
+import { PackedStats } from "./interfaces";
+import { PackedBoxProvider } from "./contexts/PackedBoxContext";
 import logo from "./boxPackerLogo.png";
-import PackedBoxModal from "./components/PackedBoxModal";
 import BoxSetup from "./BoxSetup";
 import ItemSetup from "./ItemSetup";
 import { getStats } from "./contexts/PackedBoxContext/helper";
 import InfoModal from "./components/InfoModal";
-
-interface PackedBoxProps {
-  packedBox: PackedBoxItf;
-}
-
-const PackedBox = ({ packedBox }: PackedBoxProps) => {
-  const mobile = useMediaQuery("(max-width: 375px)");
-
-  const { currentItemGroups } = usePackedBox();
-  const tableData = currentItemGroups.map((ig) => ({
-    color: <ColorSwatch color={colorFromString(ig.item.name)} />,
-    name: ig.item.name,
-    quantity: ig.quantity,
-  }));
-
-  return (
-    <Stack gap={"xs"} mt={"md"}>
-      <Title order={2} flex={"auto"}>
-        {packedBox.box.name}
-      </Title>
-      <Paper shadow="sm">
-        <Stack>
-          <PackedBoxPreview size={mobile ? "sm" : "md"} />
-          <PackedBoxModal />
-          <CustomTable
-            columns={[
-              { key: "color", title: "", width: "43px" },
-              { key: "name", title: "Name" },
-              { key: "quantity", title: "Qty", width: "70px" },
-            ]}
-            data={tableData}
-          />
-        </Stack>
-      </Paper>
-    </Stack>
-  );
-};
+import PackedBoxResult from "./components/PackedBoxResult";
 
 const App = () => {
   const [boxes] = useAtom(boxesAtom);
@@ -177,7 +135,7 @@ const App = () => {
 
               {packedBoxes.map((pb, pbIdx) => (
                 <PackedBoxProvider key={pbIdx} packedBox={pb}>
-                  <PackedBox packedBox={pb} />
+                  <PackedBoxResult packedBox={pb} />
                 </PackedBoxProvider>
               ))}
               <Space h={"30vh"} />
